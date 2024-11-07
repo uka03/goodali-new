@@ -429,22 +429,20 @@ class DioClient {
       final model = LessonResponse.fromJson(response.data);
       return model;
     } catch (e) {
-      print(e);
       final dioFailure = e as DioException?;
       final error = LessonResponse.fromJson(dioFailure?.response?.data);
       return error;
     }
   }
 
-  Future<LessonResponse> getTrainingTask(int? id) async {
+  Future<TaskResponse> getTrainingTask(int? id) async {
     try {
       final response = await _dioClient.get("$baseUrl/task/?userLessonId=$id");
-      final model = LessonResponse.fromJson(response.data);
+      final model = TaskResponse.fromJson(response.data);
       return model;
     } catch (e) {
-      print(e);
       final dioFailure = e as DioException?;
-      final error = LessonResponse.fromJson(dioFailure?.response?.data);
+      final error = TaskResponse.fromJson(dioFailure?.response?.data);
       return error;
     }
   }

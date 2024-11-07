@@ -272,6 +272,7 @@ class ProfileItem extends StatelessWidget {
           imageUrl: user?.avatar.toUrl() ?? "",
           width: 74,
           height: 74,
+          size: "xs",
           borderRadius: 50,
         ),
         HSpacer(),

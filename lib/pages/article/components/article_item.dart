@@ -35,6 +35,7 @@ class ArticleItem extends StatelessWidget {
         children: [
           CachedImage(
             imageUrl: post?.banner.toUrl() ?? placeholder,
+            size: "xs",
             width: 80,
             height: 80,
             borderRadius: 8,

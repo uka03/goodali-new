@@ -63,6 +63,7 @@ class HomeFeel extends StatelessWidget {
                         imageUrl: mood.banner.toUrl(),
                         width: imageSize,
                         height: imageSize,
+                        size: "xs",
                         fit: BoxFit.cover,
                       ),
                     ),

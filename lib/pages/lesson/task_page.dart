@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/lesson_response.dart';
-import 'package:goodali/connection/model/purchase_response.dart';
-import 'package:goodali/extensions/string_extensions.dart';
-import 'package:goodali/pages/lesson/lesson_page.dart';
 import 'package:goodali/pages/training/provider/training_provider.dart';
-import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
@@ -13,23 +9,23 @@ import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:provider/provider.dart';
 
-class ItemPage extends StatefulWidget {
-  const ItemPage({super.key});
+class TaskPage extends StatefulWidget {
+  const TaskPage({super.key});
 
-  static const String path = "/item-page";
+  static const String path = "/task-page";
 
   @override
-  State<ItemPage> createState() => _ItemPageState();
+  State<TaskPage> createState() => _TaskPageState();
 }
 
-class _ItemPageState extends State<ItemPage> {
+class _TaskPageState extends State<TaskPage> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final item = ModalRoute.of(context)?.settings.arguments as PurchaseTrainingData?;
+      final item = ModalRoute.of(context)?.settings.arguments as LessonResponseData?;
       if (item != null) {
-        context.read<TrainingProvider>().getTraingingItem(item);
+        context.read<TrainingProvider>().getTraingingTask(item);
       }
     });
   }
@@ -39,7 +35,7 @@ class _ItemPageState extends State<ItemPage> {
     return GeneralScaffold(
       appBar: const CustomAppBar(),
       child: Selector<TrainingProvider, String?>(
-        selector: (context, provider) => provider.trainingData?.name,
+        selector: (context, provider) => provider.lesson?.name,
         builder: (context, trainingName, _) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,16 +50,19 @@ class _ItemPageState extends State<ItemPage> {
                   color: GeneralColors.primaryColor,
                   onRefresh: () async {
                     final provider = context.read<TrainingProvider>();
-                    await provider.getTraingingItem(provider.trainingData);
+                    await provider.getTraingingTask(provider.lesson);
                   },
-                  child: Selector<TrainingProvider, List<LessonResponseData>>(
-                    selector: (context, provider) => provider.items,
+                  child: Selector<TrainingProvider, List<TaskResponseData>>(
+                    selector: (context, provider) => provider.tasks,
                     builder: (context, items, _) {
                       return ListView.separated(
                         itemCount: items.length,
                         separatorBuilder: (context, index) => const VSpacer(),
                         itemBuilder: (context, index) {
-                          return TrainingItemTile(item: items[index]);
+                          return TaskItem(
+                            item: items[index],
+                            index: index,
+                          );
                         },
                       );
                     },
@@ -78,42 +77,56 @@ class _ItemPageState extends State<ItemPage> {
   }
 }
 
-class TrainingItemTile extends StatelessWidget {
-  final LessonResponseData item;
+class TaskItem extends StatelessWidget {
+  final TaskResponseData item;
+  final int index;
 
-  const TrainingItemTile({super.key, required this.item});
+  const TaskItem({super.key, required this.item, required this.index});
+
+  String getTask(int? type) {
+    switch (type) {
+      case 0:
+        return "Унших материал";
+      case 1:
+        return "Бичих";
+      case 2:
+        return "Сонсох";
+      case 3:
+        return "Хийх";
+      case 4:
+        return "Үзэх";
+      case 5:
+        return "Мэдрэх";
+      case 6:
+        return "Судлах";
+      default:
+        return "Unknown";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return CustomButton(
       onTap: () {
-        Navigator.pushNamed(context, LessonPage.path, arguments: item);
+        // Navigator.pushNamed(context, LessonPage.path, arguments: item);
       },
       child: Row(
         children: [
-          CachedImage(
-            imageUrl: item.banner.toUrl(),
-            height: 48,
-            borderRadius: 8,
-            size: "xs",
-            width: 48,
-          ),
-          const HSpacer(),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.name ?? "",
+                  "${index + 1}.${getTask(item.type)}",
                   style: GeneralTextStyle.titleText(),
                 ),
                 VSpacer.sm(),
-                Text("${item.done ?? 0}/${item.allTask ?? 0} даалгавар"),
+                Text(item.isAnswered == 1 ? "Дууссан" : "Хийгээгүй"),
               ],
             ),
           ),
           const HSpacer(),
-          TaskStatusIcon(isComplete: item.allTask == item.done),
+          TaskStatusIcon(isComplete: item.isAnswered == 1),
         ],
       ),
     );

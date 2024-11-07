@@ -103,6 +103,7 @@ class _CartPageState extends State<CartPage> {
                                     imageUrl: item?.thumbImg?.toUrl() ?? placeholder,
                                     width: 40,
                                     height: 40,
+                                    size: "xs",
                                     fit: BoxFit.cover,
                                   ),
                                 ),

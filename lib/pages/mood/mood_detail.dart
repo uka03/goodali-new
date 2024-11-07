@@ -110,6 +110,7 @@ class _MoodDetailState extends State<MoodDetail> {
                                     imageUrl: moodDetail.banner.toUrl(),
                                     width: 200,
                                     height: 200,
+                                    size: "small",
                                     borderRadius: 20,
                                   ),
                                 ),

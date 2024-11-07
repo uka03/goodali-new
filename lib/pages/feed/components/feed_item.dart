@@ -59,6 +59,7 @@ class PostItem extends StatelessWidget {
                   imageUrl: item.avatar.toUrl(),
                   width: 30,
                   height: 30,
+                  size: "xs",
                   borderRadius: 40,
                 ),
                 HSpacer(),

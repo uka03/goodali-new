@@ -127,6 +127,7 @@ class _FeedDetailState extends State<FeedDetail> {
                           imageUrl: item.avatar.toUrl(),
                           width: 40,
                           height: 40,
+                          size: "xs",
                           borderRadius: 40,
                         ),
                         HSpacer(),

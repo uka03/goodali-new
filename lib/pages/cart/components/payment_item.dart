@@ -35,6 +35,7 @@ class PaymentItem extends StatelessWidget {
                 ? CachedImage(
                     imageUrl: logoPath,
                     width: 30,
+                    size: "xs",
                     height: 30,
                   )
                 : Image.asset(

@@ -9,7 +9,9 @@ class TrainingProvider extends ChangeNotifier {
   TrainingInfoResponseData? trainingInfo;
   List<LessonResponseData> lessons = List.empty(growable: true);
   List<LessonResponseData> items = List.empty(growable: true);
+  List<TaskResponseData> tasks = List.empty(growable: true);
   LessonResponseData? item;
+  LessonResponseData? lesson;
   PurchaseTrainingData? trainingData;
 
   getTraining(int? id) async {
@@ -41,8 +43,27 @@ class TrainingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getTraingingTask(LessonResponseData? data) async {
+    tasks.clear();
+    final response = await _dioClient.getTrainingTask(data?.id);
+
+    tasks.addAll(response.data ?? []);
+    lesson = data;
+    notifyListeners();
+  }
+
   void clearItems() {
     items.clear(); // Clear the items list
+    notifyListeners(); // Notify listeners to update the UI
+  }
+
+  void clearTasks() {
+    tasks.clear(); // Clear the items list
+    notifyListeners(); // Notify listeners to update the UI
+  }
+
+  void clearlessons() {
+    lessons.clear(); // Clear the items list
     notifyListeners(); // Notify listeners to update the UI
   }
 }

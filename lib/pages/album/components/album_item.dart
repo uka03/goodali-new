@@ -31,6 +31,7 @@ class AlbumItem extends StatelessWidget {
               borderRadius: 8,
               height: 180,
               width: 180,
+              size: "xs",
               imageUrl: album?.banner.toUrl() ?? placeholder,
             ),
             VSpacer(size: 12),

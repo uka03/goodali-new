@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/lesson_response.dart';
+import 'package:goodali/pages/lesson/task_page.dart';
 import 'package:goodali/pages/training/provider/training_provider.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
+import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
 import 'package:goodali/utils/spacer.dart';
@@ -61,7 +63,10 @@ class _LessonPageState extends State<LessonPage> {
                         itemCount: lessons.length,
                         itemBuilder: (context, index) {
                           final item = lessons[index];
-                          return LessonItem(item: item);
+                          return LessonItem(
+                            item: item,
+                            index: index,
+                          );
                         },
                         separatorBuilder: (BuildContext context, int index) => const VSpacer(),
                       );
@@ -79,46 +84,52 @@ class _LessonPageState extends State<LessonPage> {
 
 class LessonItem extends StatelessWidget {
   final LessonResponseData item;
+  final int index;
 
-  const LessonItem({super.key, required this.item});
+  const LessonItem({super.key, required this.item, required this.index});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                item.name ?? "",
-                style: GeneralTextStyle.titleText(),
+    return CustomButton(
+      onTap: () {
+        Navigator.pushNamed(context, TaskPage.path, arguments: item);
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${index + 1}.${item.name ?? ""}",
+                  style: GeneralTextStyle.titleText(),
+                ),
+                VSpacer.sm(),
+                Text("${item.done ?? 0}/${item.allTask ?? 0} даалгавар"),
+              ],
+            ),
+          ),
+          const HSpacer(),
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: item.allTask == item.done ? GeneralColors.successColor : Colors.white,
+              border: Border.all(
+                color: item.allTask == item.done ? GeneralColors.successColor : GeneralColors.borderColor,
+                width: 2,
               ),
-              VSpacer.sm(),
-              Text("${item.done ?? 0}/${item.allTask ?? 0} даалгавар"),
-            ],
-          ),
-        ),
-        const HSpacer(),
-        Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: item.allTask == item.done ? GeneralColors.successColor : Colors.white,
-            border: Border.all(
-              color: item.allTask == item.done ? GeneralColors.successColor : GeneralColors.borderColor,
-              width: 2,
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.check,
+                size: 15,
+                color: Colors.white,
+              ),
             ),
           ),
-          child: const Center(
-            child: Icon(
-              Icons.check,
-              size: 15,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

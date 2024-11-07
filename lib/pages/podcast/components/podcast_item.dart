@@ -62,6 +62,7 @@ class PodcastItem extends StatelessWidget {
                   CachedImage(
                     width: 44,
                     height: 44,
+                    size: "xs",
                     imageUrl: podcast?.banner.toUrl() ?? "",
                     borderRadius: 4,
                   ),

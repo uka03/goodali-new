@@ -50,6 +50,7 @@ class _PodcastPlayerState extends State<PodcastPlayer> {
                       imageUrl: provider.data?.banner.toUrl() ?? "",
                       width: MediaQuery.of(context).size.width * 0.6,
                       height: MediaQuery.of(context).size.width * 0.6,
+                      size: "small",
                       borderRadius: 12,
                     ),
                     Text(
