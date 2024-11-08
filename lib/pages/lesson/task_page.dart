@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/lesson_response.dart';
+import 'package:goodali/pages/lesson/task_detail.dart';
 import 'package:goodali/pages/training/provider/training_provider.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
@@ -19,29 +20,39 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
+  late final TrainingProvider _provider;
   @override
   void initState() {
     super.initState();
+    _provider = Provider.of(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final item = ModalRoute.of(context)?.settings.arguments as LessonResponseData?;
       if (item != null) {
-        context.read<TrainingProvider>().getTraingingTask(item);
+        _provider.getTraingingTask(item);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _provider.tasks = [];
+    _provider.lesson = null;
   }
 
   @override
   Widget build(BuildContext context) {
     return GeneralScaffold(
       appBar: const CustomAppBar(),
-      child: Selector<TrainingProvider, String?>(
-        selector: (context, provider) => provider.lesson?.name,
-        builder: (context, trainingName, _) {
+      child: Consumer<TrainingProvider>(
+        builder: (context, provider, _) {
+          final items = provider.tasks;
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                trainingName ?? "",
+                provider.lesson?.name ?? "",
                 style: GeneralTextStyle.titleText(fontSize: 32),
               ),
               const VSpacer(),
@@ -52,18 +63,13 @@ class _TaskPageState extends State<TaskPage> {
                     final provider = context.read<TrainingProvider>();
                     await provider.getTraingingTask(provider.lesson);
                   },
-                  child: Selector<TrainingProvider, List<TaskResponseData>>(
-                    selector: (context, provider) => provider.tasks,
-                    builder: (context, items, _) {
-                      return ListView.separated(
-                        itemCount: items.length,
-                        separatorBuilder: (context, index) => const VSpacer(),
-                        itemBuilder: (context, index) {
-                          return TaskItem(
-                            item: items[index],
-                            index: index,
-                          );
-                        },
+                  child: ListView.separated(
+                    itemCount: items.length,
+                    separatorBuilder: (context, index) => const VSpacer(),
+                    itemBuilder: (context, index) {
+                      return TaskItem(
+                        item: items[index],
+                        index: index,
                       );
                     },
                   ),
@@ -108,7 +114,7 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomButton(
       onTap: () {
-        // Navigator.pushNamed(context, LessonPage.path, arguments: item);
+        Navigator.pushNamed(context, TaskDetail.path, arguments: index);
       },
       child: Row(
         children: [

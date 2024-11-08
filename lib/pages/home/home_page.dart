@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:goodali/extensions/string_extensions.dart';
+import 'package:goodali/pages/album/album_detail.dart';
 import 'package:goodali/pages/cart/cart_page.dart';
 import 'package:goodali/pages/home/components/type_bar.dart';
 import 'package:goodali/pages/home/pages/home_feel.dart';
@@ -8,9 +9,11 @@ import 'package:goodali/pages/home/pages/home_listen.dart';
 import 'package:goodali/pages/home/pages/home_read.dart';
 import 'package:goodali/pages/home/pages/home_training.dart';
 import 'package:goodali/pages/home/provider/home_provider.dart';
+import 'package:goodali/pages/training/training_page.dart';
 import 'package:goodali/shared/components/action_item.dart';
 import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
+import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/components/custom_text_field.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/shared/provider/navigator_provider.dart';
@@ -82,9 +85,28 @@ class _HomePageState extends State<HomePage> {
                         ),
                         itemBuilder: (context, index, realIndex) {
                           final banner = homeProvider.banners[index];
-                          return CachedImage(
-                            imageUrl: banner.banner.toUrl(),
-                            fit: BoxFit.cover,
+                          return CustomButton(
+                            onTap: () {
+                              switch (banner.productType) {
+                                case 0:
+                                  Navigator.pushNamed(context, AlbumDetail.path, arguments: banner.productId);
+                                  break;
+                                case 1:
+                                  // Navigator.pushNamed(context, AlbumDetail.path, arguments: item?.productId);
+                                  break;
+                                case 2:
+                                  Navigator.pushNamed(context, TrainingPage.path, arguments: banner.productId);
+                                  break;
+                                case 4:
+                                  Navigator.pushNamed(context, TrainingPage.path, arguments: banner.productId);
+                                  break;
+                                default:
+                              }
+                            },
+                            child: CachedImage(
+                              imageUrl: banner.banner.toUrl(),
+                              fit: BoxFit.cover,
+                            ),
                           );
                         },
                       ),

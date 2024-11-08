@@ -13,9 +13,13 @@ class AuthTextField extends StatelessWidget {
     this.maxLength,
     this.extend = false,
     this.textInputAction,
+    this.onChanged,
+    this.onClear,
   });
   final TextEditingController controller;
   final String? Function(String? value)? validator;
+  final Function(String? value)? onChanged;
+  final Function()? onClear;
   final String? hintText;
   final TextInputType? keyboardType;
   final int? maxLength;
@@ -56,6 +60,9 @@ class AuthTextField extends StatelessWidget {
               return null;
             },
             onChanged: (value) {
+              if (onChanged != null) {
+                onChanged!(value);
+              }
               if (value.isNotEmpty) {
                 if (!isTyping.value) {
                   isTyping.value = true;
@@ -75,6 +82,9 @@ class AuthTextField extends StatelessWidget {
               suffixIcon: value
                   ? CustomButton(
                       onTap: () {
+                        if (onClear != null) {
+                          onClear!();
+                        }
                         controller.clear();
                       },
                       child: Icon(Icons.close))

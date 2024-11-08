@@ -16,6 +16,7 @@ import 'package:goodali/pages/cart/qpay_page.dart';
 import 'package:goodali/pages/feed/create_post.dart';
 import 'package:goodali/pages/lesson/item_page.dart';
 import 'package:goodali/pages/lesson/lesson_page.dart';
+import 'package:goodali/pages/lesson/task_detail.dart';
 import 'package:goodali/pages/lesson/task_page.dart';
 import 'package:goodali/pages/menu/faq_page.dart';
 import 'package:goodali/pages/menu/menu_page.dart';
@@ -57,4 +58,5 @@ final Map<String, WidgetBuilder> routes = {
   ItemPage.path: (context) => ItemPage(),
   LessonPage.path: (context) => LessonPage(),
   TaskPage.path: (context) => TaskPage(),
+  TaskDetail.path: (context) => TaskDetail(),
 };

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:goodali/connection/model/training_response.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/training/packages_page.dart';
 import 'package:goodali/pages/training/provider/training_provider.dart';
@@ -29,8 +28,8 @@ class _TrainingPageState extends State<TrainingPage> {
     super.initState();
     _trainingProvider = Provider.of<TrainingProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final trainging = ModalRoute.of(context)?.settings.arguments as TrainingResponseData?;
-      _trainingProvider.getTraining(trainging?.id);
+      final id = ModalRoute.of(context)?.settings.arguments as int?;
+      _trainingProvider.getTraining(id);
     });
   }
 

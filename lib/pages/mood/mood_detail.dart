@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/mood_response.dart';
+import 'package:goodali/connection/model/podcast_response.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/mood/provider/mood_provider.dart';
+import 'package:goodali/pages/podcast/components/audio_controls.dart';
+import 'package:goodali/pages/podcast/components/player_provider.dart';
+import 'package:goodali/pages/podcast/podcast_player.dart';
 import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
@@ -22,16 +26,24 @@ class _MoodDetailState extends State<MoodDetail> {
   late final MoodProvider _provider;
   final _pagingController = PageController(initialPage: 0);
   final page = ValueNotifier<double>(1);
+  late final PlayerProvider _playerProvider;
 
   @override
   void initState() {
     super.initState();
     _provider = Provider.of<MoodProvider>(context, listen: false);
+    _playerProvider = Provider.of<PlayerProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final mood = ModalRoute.of(context)?.settings.arguments as MoodResponseData?;
       _provider.getMoodItems(mood?.id);
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _playerProvider.setPlayerState(CustomState.disposed);
   }
 
   @override
@@ -47,8 +59,8 @@ class _MoodDetailState extends State<MoodDetail> {
           end: Alignment.bottomRight,
         ),
       ),
-      child: Consumer<MoodProvider>(
-        builder: (context, provider, _) {
+      child: Consumer2<MoodProvider, PlayerProvider>(
+        builder: (context, provider, audioProvider, _) {
           return Scaffold(
             backgroundColor: Colors.transparent,
             appBar: CustomAppBar(
@@ -96,42 +108,83 @@ class _MoodDetailState extends State<MoodDetail> {
                       itemCount: provider.moodDetails.length,
                       onPageChanged: (value) {
                         page.value = value.toDouble() + 1;
+                        audioProvider.setPlayerState(CustomState.paused);
                       },
                       itemBuilder: (context, index) {
                         final moodDetail = provider.moodDetails[index];
+
+                        if (moodDetail.audio?.isNotEmpty == true && moodDetail.id != audioProvider.data?.id) {
+                          final data = PodcastResponseData.fromJson(moodDetail.toJson());
+                          audioProvider.init(data);
+                        }
+
                         return Padding(
                           padding: const EdgeInsets.all(32.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              if (moodDetail.banner?.isNotEmpty == true)
-                                Center(
-                                  child: CachedImage(
-                                    imageUrl: moodDetail.banner.toUrl(),
-                                    width: 200,
-                                    height: 200,
-                                    size: "small",
-                                    borderRadius: 20,
+                              Column(
+                                children: [
+                                  if (moodDetail.banner?.isNotEmpty == true)
+                                    Center(
+                                      child: CachedImage(
+                                        imageUrl: moodDetail.banner.toUrl(),
+                                        width: 200,
+                                        height: 200,
+                                        size: "small",
+                                        borderRadius: 20,
+                                      ),
+                                    ),
+                                  VSpacer(size: 24),
+                                  Text(
+                                    moodDetail.title ?? "",
+                                    style: GeneralTextStyle.bodyText(
+                                      fontSize: 16,
+                                      textColor: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              VSpacer(size: 24),
-                              Text(
-                                moodDetail.title ?? "",
-                                style: GeneralTextStyle.bodyText(
-                                  fontSize: 16,
-                                  textColor: Colors.white,
-                                ),
+                                  VSpacer(size: 32),
+                                  Text(
+                                    removeHtmlTags(
+                                      moodDetail.body ?? "",
+                                    ),
+                                    style: GeneralTextStyle.titleText(
+                                      textColor: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              VSpacer(size: 32),
-                              Text(
-                                removeHtmlTags(
-                                  moodDetail.body ?? "",
+                              if (moodDetail.audio?.isNotEmpty == true && moodDetail.audio != "Audio failed to upload")
+                                StreamBuilder<SeekBarData>(
+                                  stream: audioProvider.streamController?.stream,
+                                  builder: (context, snapshot) {
+                                    final positionData = snapshot.data;
+                                    return Column(
+                                      children: [
+                                        CustomProgressBar(
+                                          progress: positionData?.position,
+                                          total: positionData?.duration,
+                                          buffered: positionData?.bufferedPosition,
+                                          onSeek: (value) {
+                                            audioProvider.audioPlayer?.seek(value);
+                                          },
+                                          progressBarColor: Colors.white,
+                                          baseBarColor: Colors.white.withOpacity(0.3),
+                                          bufferedBarColor: Colors.white.withOpacity(0.4),
+                                          textColor: Colors.white,
+                                        ),
+                                        VSpacer(),
+                                        AudioControls(
+                                          audioProvider: audioProvider,
+                                          positionData: positionData,
+                                        ),
+                                        VSpacer(),
+                                      ],
+                                    );
+                                  },
                                 ),
-                                style: GeneralTextStyle.titleText(
-                                  textColor: Colors.white,
-                                  fontSize: 18,
-                                ),
-                              ),
                             ],
                           ),
                         );
@@ -174,7 +227,9 @@ class _MoodDetailState extends State<MoodDetail> {
                                     duration: Duration(milliseconds: 300),
                                     curve: Curves.linear,
                                   );
-                                } else {}
+                                } else {
+                                  Navigator.pop(context);
+                                }
                               },
                               child: Container(
                                 decoration: BoxDecoration(

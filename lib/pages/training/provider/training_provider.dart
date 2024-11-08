@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/connection/dio_client.dart';
+import 'package:goodali/connection/model/base_response.dart';
 import 'package:goodali/connection/model/lesson_response.dart';
 import 'package:goodali/connection/model/purchase_response.dart';
 import 'package:goodali/connection/model/training_response.dart';
@@ -50,6 +51,10 @@ class TrainingProvider extends ChangeNotifier {
     tasks.addAll(response.data ?? []);
     lesson = data;
     notifyListeners();
+  }
+
+  Future<BaseResponse> setAnswer(int? id, String? text) async {
+    return await _dioClient.setAnswer(id, text);
   }
 
   void clearItems() {

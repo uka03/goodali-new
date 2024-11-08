@@ -9,6 +9,7 @@ import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/components/custom_check_box.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/empty_state.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/utils/toasts.dart';
@@ -54,43 +55,32 @@ class _PackagesPageState extends State<PackagesPage> {
               textAlign: TextAlign.center,
             ),
             VSpacer(),
-            ListView.separated(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: data.length,
-              separatorBuilder: (context, index) => VSpacer(),
-              itemBuilder: (context, index) {
-                final package = data[index];
-                return Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: GeneralColors.borderColor,
-                      ),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        package.name ?? "",
-                        style: GeneralTextStyle.titleText(),
-                      ),
-                      HtmlWidget(package.body ?? ""),
-                      VSpacer(),
-                      CustomButton(
-                        onTap: () {
-                          if (!isAgreed.contains(package.id)) {
-                            isAgreed.add(package.id);
-                          } else {
-                            isAgreed.remove(package.id);
-                          }
-                          setState(() {});
-                        },
-                        child: Row(
+            data.isNotEmpty == true
+                ? ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: data.length,
+                    separatorBuilder: (context, index) => VSpacer(),
+                    itemBuilder: (context, index) {
+                      final package = data[index];
+                      return Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: GeneralColors.borderColor,
+                            ),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomCheckBox(
-                              value: isAgreed.contains(package.id),
-                              onChanged: (_) {
+                            Text(
+                              package.name ?? "",
+                              style: GeneralTextStyle.titleText(),
+                            ),
+                            HtmlWidget(package.body ?? ""),
+                            VSpacer(),
+                            CustomButton(
+                              onTap: () {
                                 if (!isAgreed.contains(package.id)) {
                                   isAgreed.add(package.id);
                                 } else {
@@ -98,68 +88,91 @@ class _PackagesPageState extends State<PackagesPage> {
                                 }
                                 setState(() {});
                               },
-                            ),
-                            HSpacer(),
-                            Expanded(
-                              child: Text("Гэрээтэй танилцан, зөвшөөрсөн"),
-                            )
-                          ],
-                        ),
-                      ),
-                      VSpacer(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomButton(
-                            onTap: () async {
-                              if (isAgreed.contains(package.id)) {
-                                final cart = context.read<CartProvider>();
-                                await cart.addCart(package.productId);
-                                if (context.mounted) {
-                                  Navigator.pushNamed(context, CartPage.path);
-                                }
-                              } else {
-                                Toast.error(context, description: "Та гэрээтэй танилцан зөвшөөрөх хэрэгтэй");
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: GeneralColors.primaryColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
                               child: Row(
                                 children: [
-                                  Text(
-                                    'Сонгох',
-                                    style: GeneralTextStyle.titleText(
-                                      textColor: Colors.white,
-                                    ),
+                                  CustomCheckBox(
+                                    value: isAgreed.contains(package.id),
+                                    onChanged: (_) {
+                                      if (!isAgreed.contains(package.id)) {
+                                        isAgreed.add(package.id);
+                                      } else {
+                                        isAgreed.remove(package.id);
+                                      }
+                                      setState(() {});
+                                    },
                                   ),
-                                  HSpacer.sm(),
-                                  Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    size: 18,
-                                    color: Colors.white,
+                                  HSpacer(),
+                                  Expanded(
+                                    child: Text("Гэрээтэй танилцан, зөвшөөрсөн"),
                                   )
                                 ],
                               ),
                             ),
-                          ),
-                          Text(
-                            formatCurrency(package.price ?? 0),
-                            style: GeneralTextStyle.titleText(),
-                          )
-                        ],
-                      )
+                            VSpacer(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomButton(
+                                  onTap: () async {
+                                    if (isAgreed.contains(package.id)) {
+                                      final cart = context.read<CartProvider>();
+                                      await cart.addCart(package.productId);
+                                      if (context.mounted) {
+                                        Navigator.pushNamed(context, CartPage.path);
+                                      }
+                                    } else {
+                                      Toast.error(context, description: "Та гэрээтэй танилцан зөвшөөрөх хэрэгтэй");
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: GeneralColors.primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'Сонгох',
+                                          style: GeneralTextStyle.titleText(
+                                            textColor: Colors.white,
+                                          ),
+                                        ),
+                                        HSpacer.sm(),
+                                        Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          size: 18,
+                                          color: Colors.white,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  formatCurrency(package.price ?? 0),
+                                  style: GeneralTextStyle.titleText(),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                : Column(
+                    children: const [
+                      VSpacer(size: 120),
+                      Center(
+                        child: EmptyState(
+                          title: " Тухайн сургалтанд идэвхитэй\n багц олдсонгүй.",
+                          fontSize: 16,
+                        ),
+                      ),
                     ],
                   ),
-                );
-              },
-            )
           ],
         ),
       ),

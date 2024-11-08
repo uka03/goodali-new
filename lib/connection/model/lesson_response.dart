@@ -75,9 +75,9 @@ class TaskResponseData {
   @JsonKey(name: "is_answer")
   final int? isAnswer;
   @JsonKey(name: "is_answered")
-  final int? isAnswered;
+  int? isAnswered;
   @JsonKey(name: "answer_data")
-  final String? answerData;
+  String? answerData;
 
   TaskResponseData({
     required this.answerData,

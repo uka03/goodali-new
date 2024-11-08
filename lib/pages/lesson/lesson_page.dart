@@ -20,32 +20,43 @@ class LessonPage extends StatefulWidget {
 }
 
 class _LessonPageState extends State<LessonPage> {
+  late final TrainingProvider _provider;
   @override
   void initState() {
     super.initState();
+    _provider = Provider.of(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final item = ModalRoute.of(context)?.settings.arguments as LessonResponseData?;
       if (item != null) {
-        context.read<TrainingProvider>().getTraingingLesson(item);
+        _provider.getTraingingLesson(item);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _provider.lessons = [];
+    _provider.item = null;
   }
 
   @override
   Widget build(BuildContext context) {
     return GeneralScaffold(
       appBar: const CustomAppBar(),
-      child: Selector<TrainingProvider, LessonResponseData?>(
-        selector: (context, provider) => provider.item,
-        builder: (context, lesson, _) {
-          if (lesson == null) {
+      child: Consumer<TrainingProvider>(
+        builder: (context, provider, _) {
+          final item = provider.item;
+          final items = provider.lessons;
+
+          if (item == null) {
             return const Center(child: CircularProgressIndicator());
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                lesson.name ?? "",
+                item.name ?? "",
                 style: GeneralTextStyle.titleText(fontSize: 32),
                 maxLines: 2,
               ),
@@ -54,23 +65,21 @@ class _LessonPageState extends State<LessonPage> {
                 child: RefreshIndicator(
                   color: GeneralColors.primaryColor,
                   onRefresh: () async {
-                    await context.read<TrainingProvider>().getTraingingLesson(lesson);
+                    await context.read<TrainingProvider>().getTraingingLesson(item);
                   },
-                  child: Selector<TrainingProvider, List<LessonResponseData>>(
-                    selector: (context, provider) => provider.lessons,
-                    builder: (context, lessons, _) {
-                      return ListView.separated(
-                        itemCount: lessons.length,
-                        itemBuilder: (context, index) {
-                          final item = lessons[index];
-                          return LessonItem(
-                            item: item,
-                            index: index,
-                          );
+                  child: ListView.separated(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      return LessonItem(
+                        item: item,
+                        index: index,
+                        onClick: () async {
+                          Navigator.pushNamed(context, TaskPage.path, arguments: item);
                         },
-                        separatorBuilder: (BuildContext context, int index) => const VSpacer(),
                       );
                     },
+                    separatorBuilder: (BuildContext context, int index) => const VSpacer(),
                   ),
                 ),
               ),
@@ -85,15 +94,14 @@ class _LessonPageState extends State<LessonPage> {
 class LessonItem extends StatelessWidget {
   final LessonResponseData item;
   final int index;
+  final Function() onClick;
 
-  const LessonItem({super.key, required this.item, required this.index});
+  const LessonItem({super.key, required this.item, required this.index, required this.onClick});
 
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      onTap: () {
-        Navigator.pushNamed(context, TaskPage.path, arguments: item);
-      },
+      onTap: onClick,
       child: Row(
         children: [
           Expanded(

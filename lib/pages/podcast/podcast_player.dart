@@ -145,12 +145,17 @@ class CustomProgressBar extends StatelessWidget {
     this.buffered,
     this.onSeek,
     this.isMiniPlayer = false,
+    this.progressBarColor,
+    this.baseBarColor,
+    this.bufferedBarColor,
+    this.textColor,
   });
   final Duration? progress;
   final Duration? total;
   final Duration? buffered;
   final Function(Duration value)? onSeek;
   final bool isMiniPlayer;
+  final Color? progressBarColor, baseBarColor, bufferedBarColor, textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -160,9 +165,9 @@ class CustomProgressBar extends StatelessWidget {
       buffered: buffered ?? Duration.zero,
       thumbGlowRadius: isMiniPlayer ? 0.0 : 30.0,
       thumbRadius: isMiniPlayer ? 0.0 : 10,
-      progressBarColor: GeneralColors.primaryColor,
-      baseBarColor: GeneralColors.grayColor,
-      bufferedBarColor: Colors.grey,
+      progressBarColor: progressBarColor ?? GeneralColors.primaryColor,
+      baseBarColor: baseBarColor ?? GeneralColors.grayColor,
+      bufferedBarColor: bufferedBarColor ?? Colors.grey,
       timeLabelLocation: isMiniPlayer ? TimeLabelLocation.none : null,
       onSeek: (value) {
         if (onSeek != null) {
@@ -174,7 +179,7 @@ class CustomProgressBar extends StatelessWidget {
       timeLabelType: TimeLabelType.remainingTime,
       timeLabelTextStyle: GeneralTextStyle.bodyText(
         fontSize: 14,
-        textColor: GeneralColors.grayColor,
+        textColor: textColor ?? GeneralColors.grayColor,
       ),
     );
   }

@@ -447,6 +447,24 @@ class DioClient {
     }
   }
 
+  Future<BaseResponse> setAnswer(int? id, String? text) async {
+    try {
+      final data = {
+        "text": text ?? "",
+        "task_id": id.toString(),
+      };
+
+      final response = await _dioClient.post("$baseUrl/setanswer", data: data);
+      final model = BaseResponse.fromJson(response.data);
+
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = BaseResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
   Future<PackageResponse> getPackages(int? id) async {
     try {
       final response = await _dioClient.get("$baseUrl/package?trainingId=$id");
