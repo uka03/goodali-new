@@ -21,6 +21,11 @@ class CartProvider extends ChangeNotifier {
     return response;
   }
 
+  Future<BaseResponse> checkPayment(String? id, int type) async {
+    final response = await _dioClient.checkPayment(id, type);
+    return response;
+  }
+
   Future<BaseResponse> removeCart(int? id) async {
     final response = await _dioClient.deleteFromCart(id);
     getItems();

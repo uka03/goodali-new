@@ -7,7 +7,9 @@ part of 'cart_response.dart';
 // **************************************************************************
 
 CartResponse _$CartResponseFromJson(Map<String, dynamic> json) => CartResponse(
-      data: CartResponseData.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] == null
+          ? null
+          : CartResponseData.fromJson(json['data'] as Map<String, dynamic>),
       error: json['error'] as String?,
       message: json['message'] as String?,
       success: json['success'] as bool?,

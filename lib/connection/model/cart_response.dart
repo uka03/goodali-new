@@ -4,7 +4,7 @@ part 'cart_response.g.dart';
 
 @JsonSerializable()
 class CartResponse extends BaseResponse {
-  final CartResponseData data;
+  final CartResponseData? data;
   CartResponse({
     required this.data,
     super.error,

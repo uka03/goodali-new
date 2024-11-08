@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:goodali/connection/model/order_response.dart';
 import 'package:goodali/pages/cart/provider/cart_provider.dart';
 import 'package:goodali/pages/home/provider/home_provider.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/general_scaffold.dart';
+import 'package:goodali/utils/toasts.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -20,6 +22,7 @@ class _CardPageState extends State<CardPage> {
 
   late CartProvider cartProvider;
   late HomeProvider homeProvider;
+  OrderResponseData? order;
 
   @override
   void initState() {
@@ -31,12 +34,23 @@ class _CardPageState extends State<CardPage> {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(NavigationDelegate());
+      ..setNavigationDelegate(NavigationDelegate(
+        onPageFinished: (value) {
+          print(value);
+          if (value.contains("status_code=000")) {
+            cartProvider.checkPayment(order?.transactionId, 0);
+            Toast.success(context, description: "Худалдан авалт амжилттай.");
+            homeProvider.getHomeData(refresh: true);
+            Navigator.popUntil(context, (route) => route.isFirst);
+          }
+        },
+      ));
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final response = await cartProvider.createOrder(1);
       final uriUrl = Uri.parse(response?.url ?? "");
       _controller.loadRequest(uriUrl);
+      order = response;
     });
   }
 

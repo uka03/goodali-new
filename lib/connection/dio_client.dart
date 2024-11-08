@@ -220,6 +220,19 @@ class DioClient {
     }
   }
 
+  Future<BaseResponse> checkPayment(String? id, int type) async {
+    try {
+      final response = await _dioClient.get("$baseUrl/payment/callback/${type == 1 ? "qpay" : "golomt"}/$id");
+      final model = BaseResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+
+      final error = BaseResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
   Future<BaseResponse> addToCart(int? id) async {
     try {
       final data = {

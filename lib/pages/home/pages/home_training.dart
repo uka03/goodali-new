@@ -36,7 +36,7 @@ class HomeTraining extends StatelessWidget {
                     onPressed!();
                     return;
                   }
-                  Navigator.pushNamed(context, TrainingPage.path, arguments: item.item.training);
+                  Navigator.pushNamed(context, TrainingPage.path, arguments: item.item.training?.id);
                 },
                 child: Stack(
                   children: [

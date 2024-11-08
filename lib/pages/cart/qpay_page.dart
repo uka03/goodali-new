@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/order_response.dart';
 import 'package:goodali/pages/cart/components/payment_item.dart';
 import 'package:goodali/pages/cart/provider/cart_provider.dart';
+import 'package:goodali/pages/home/provider/home_provider.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
+import 'package:goodali/shared/components/primary_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
@@ -22,13 +24,15 @@ class QpayPage extends StatefulWidget {
 
 class _QpayPageState extends State<QpayPage> {
   late final CartProvider _cartProvider;
+  late HomeProvider homeProvider;
   OrderResponseData? data;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _cartProvider = Provider.of(context, listen: false);
+
+    homeProvider = Provider.of<HomeProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final response = await _cartProvider.createOrder(0);
       setState(() {
@@ -54,6 +58,24 @@ class _QpayPageState extends State<QpayPage> {
   Widget build(BuildContext context) {
     return GeneralScaffold(
       appBar: CustomAppBar(),
+      bottomBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: PrimaryButton(
+            title: "Төлбөр шалгах",
+            onPressed: () async {
+              final response = await _cartProvider.checkPayment(data?.invoiceId, 1);
+              if (response.success == true && context.mounted) {
+                Toast.success(context, description: "Худалдан авалт амжилттай.");
+                homeProvider.getHomeData(refresh: true);
+                Navigator.popUntil(context, (route) => route.isFirst);
+              } else if (context.mounted) {
+                Toast.error(context, description: response.error ?? response.message);
+              }
+            },
+          ),
+        ),
+      ),
       child: Column(
         children: [
           Text(
