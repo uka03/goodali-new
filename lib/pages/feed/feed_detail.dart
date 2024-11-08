@@ -15,6 +15,7 @@ import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
 import 'package:goodali/utils/dailogs.dart';
 import 'package:goodali/utils/empty_state.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/utils/toasts.dart';
@@ -39,8 +40,10 @@ class _FeedDetailState extends State<FeedDetail> {
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
     _feedProvider = Provider.of<FeedProvider>(context, listen: false);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _authProvider.getMe();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showLoader();
+      await _authProvider.getMe();
+      dismissLoader();
     });
   }
 

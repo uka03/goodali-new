@@ -23,6 +23,7 @@ import 'package:goodali/pages/menu/menu_page.dart';
 import 'package:goodali/pages/menu/term_page.dart';
 import 'package:goodali/pages/mood/mood_detail.dart';
 import 'package:goodali/pages/podcast/podcast_player.dart';
+import 'package:goodali/pages/profile/profile_edit.dart';
 import 'package:goodali/pages/search/search_page.dart';
 import 'package:goodali/pages/training/packages_page.dart';
 import 'package:goodali/pages/training/training_page.dart';
@@ -61,4 +62,5 @@ final Map<String, WidgetBuilder> routes = {
   TaskPage.path: (context) => TaskPage(),
   TaskDetail.path: (context) => TaskDetail(),
   SearchPage.path: (context) => SearchPage(),
+  ProfileEdit.path: (context) => ProfileEdit(),
 };

@@ -10,6 +10,7 @@ import 'package:goodali/shared/components/custom_check_box.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
 import 'package:goodali/utils/empty_state.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/utils/toasts.dart';
@@ -34,7 +35,9 @@ class _PackagesPageState extends State<PackagesPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final detail = ModalRoute.of(context)?.settings.arguments as TrainingInfoResponseData?;
+      showLoader();
       final respoonse = await _trainingProvider.getPackages(detail?.id);
+      dismissLoader();
       setState(() {
         data = respoonse.data ?? [];
       });

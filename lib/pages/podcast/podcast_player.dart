@@ -7,6 +7,7 @@ import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,9 @@ class _PodcastPlayerState extends State<PodcastPlayer> {
     _playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final id = ModalRoute.of(context)?.settings.arguments as int?;
+      showLoader();
       final data = await _playerProvider.getPodcastById(id);
+      dismissLoader();
       await _playerProvider.init(data);
     });
   }

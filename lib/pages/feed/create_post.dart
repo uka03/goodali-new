@@ -121,12 +121,14 @@ class _CreatePostState extends State<CreatePost> {
                 title: data != null ? "Засах" : "Сонгох",
                 onPressed: () async {
                   if (data != null) {
+                    showLoader();
                     final respone = await _feedProvider.updatePost(
                       title: _titleController.text,
                       body: _contentController.text,
                       id: data?.id,
                       tags: selectedTags.map((e) => e?.id).toList(),
                     );
+                    dismissLoader();
                     if (respone.success == true) {
                       if (context.mounted) {
                         Toast.success(
@@ -233,12 +235,14 @@ class _CreatePostState extends State<CreatePost> {
                 if (selectedItem == null) {
                   Toast.error(context, description: "Хаана постлох вэ?");
                 } else {
+                  showLoader();
                   final respone = await _feedProvider.createPost(
                     title: _titleController.text,
                     body: _contentController.text,
                     postType: selectedItem?.index,
                     tags: selectedTags.map((e) => e?.id).toList(),
                   );
+                  dismissLoader();
                   if (respone.success == true) {
                     if (context.mounted) {
                       Toast.success(context, description: "Амжилттай пост нийтлэгдлээ.");

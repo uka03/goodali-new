@@ -7,6 +7,7 @@ import 'package:goodali/shared/components/keyboard_hider.dart';
 import 'package:goodali/shared/components/primary_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/utils/toasts.dart';
@@ -46,6 +47,7 @@ class _EmailConfirmState extends State<EmailConfirm> {
         otpCode: pinCode,
       );
       if (pinCode.length >= 4) {
+        showLoader();
         final response = await _authProvider.verify(data);
         if (response.success == true && mounted) {
           Navigator.pushNamed(context, PasswordPage.path, arguments: data);
@@ -54,6 +56,7 @@ class _EmailConfirmState extends State<EmailConfirm> {
             Toast.error(context, description: response.error);
           }
         }
+        dismissLoader();
       }
     }
   }
@@ -134,6 +137,7 @@ class _EmailConfirmState extends State<EmailConfirm> {
                   Center(
                     child: TextButton(
                       onPressed: () async {
+                        showLoader();
                         final response = await _authProvider.sendOTP(
                           email ?? "",
                         );
@@ -150,6 +154,7 @@ class _EmailConfirmState extends State<EmailConfirm> {
                             description: response.error ?? response.message,
                           );
                         }
+                        dismissLoader();
                       },
                       child: Text(
                         "Дахин авах",

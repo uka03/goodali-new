@@ -9,6 +9,7 @@ import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:provider/provider.dart';
@@ -31,9 +32,11 @@ class _ArticleDetailState extends State<ArticleDetail> {
   void initState() {
     super.initState();
     _articleProvider = Provider.of<ArticleProvider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showLoader();
       final id = ModalRoute.of(context)?.settings.arguments as int?;
-      _fetchData(id);
+      await _fetchData(id);
+      dismissLoader();
     });
   }
 

@@ -11,6 +11,7 @@ import 'package:goodali/shared/components/custom_read_more.dart';
 import 'package:goodali/shared/components/primary_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/utils/utils.dart';
@@ -33,8 +34,10 @@ class _AlbumDetailState extends State<AlbumDetail> {
     provider = Provider.of<AlbumProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showLoader();
       final id = ModalRoute.of(context)?.settings.arguments as int?;
       await provider.getAlbum(id);
+      dismissLoader();
     });
   }
 

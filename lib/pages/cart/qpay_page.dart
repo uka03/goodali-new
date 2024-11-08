@@ -64,7 +64,9 @@ class _QpayPageState extends State<QpayPage> {
           child: PrimaryButton(
             title: "Төлбөр шалгах",
             onPressed: () async {
+              showLoader();
               final response = await _cartProvider.checkPayment(data?.invoiceId, 1);
+              dismissLoader();
               if (response.success == true && context.mounted) {
                 Toast.success(context, description: "Худалдан авалт амжилттай.");
                 homeProvider.getHomeData(refresh: true);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:goodali/connection/model/album_response.dart';
 import 'package:goodali/connection/model/banner_response.dart';
@@ -15,10 +17,12 @@ import 'package:goodali/connection/model/purchase_response.dart';
 import 'package:goodali/connection/model/search_response.dart';
 import 'package:goodali/connection/model/tag_response.dart';
 import 'package:goodali/connection/model/training_response.dart';
+import 'package:goodali/connection/model/upload_response.dart';
 import 'package:goodali/connection/model/user_response.dart';
 import 'package:goodali/connection/model/video_response.dart';
 import 'package:goodali/connection/network_interceptor.dart';
 import 'package:goodali/utils/types.dart';
+import 'package:http_parser/http_parser.dart';
 
 class DioClient {
   final _dioClient = Dio()..interceptors.add(NetworkInterceptor());
@@ -74,6 +78,79 @@ class DioClient {
       final dioFailure = e as DioException?;
 
       final error = UserResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<UserResponse> updateMe(String? nickName) async {
+    try {
+      final response = await _dioClient.patch(
+        "$baseUrl/users/update",
+        data: {
+          "nickname": nickName,
+        },
+      );
+      final model = UserResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+
+      final error = UserResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<BaseResponse> uploadAvatar(String? imagePath) async {
+    try {
+      final response = await _dioClient.post(
+        "$baseUrl/users/upload-avatar",
+        data: {
+          "image": imagePath,
+        },
+      );
+      final model = BaseResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+
+      final error = BaseResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<UploadResponse> uploadImage(
+    File? image,
+  ) async {
+    if (image == null) {
+      return UploadResponse(success: false, error: "Та хийнэ үү.", data: null);
+    }
+
+    try {
+      String imagePath = DateTime.now().microsecondsSinceEpoch.toString();
+
+      String mimeType = "image/${imagePath.split('.').last}";
+
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(
+          image.path,
+          filename: imagePath,
+          contentType: MediaType("image", mimeType.split('/').last),
+        ),
+        "prefix": "avatar",
+      });
+
+      print(image.path);
+      final response = await _dioClient.post(
+        "$baseUrl/uploads/image",
+        data: formData,
+      );
+
+      final model = UploadResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = UploadResponse.fromJson(dioFailure?.response?.data);
+
       return error;
     }
   }

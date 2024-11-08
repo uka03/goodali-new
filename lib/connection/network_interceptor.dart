@@ -33,7 +33,7 @@ class NetworkInterceptor extends Interceptor {
     debugPrint(
       'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}',
     );
-    debugPrint("error message:  ${err.response?.data['message']}");
+    debugPrint("error message:  ${err.response?.data}");
 
     if (err.response?.statusCode == 401) {
       const storage = FlutterSecureStorage();

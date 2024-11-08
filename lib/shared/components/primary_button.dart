@@ -11,23 +11,25 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     this.textColor,
     this.radius,
+    this.isEnable = true,
   });
   final VoidCallback onPressed;
   final Widget? content;
   final String? title;
   final Color? backgroundColor, textColor;
   final double? radius;
+  final bool isEnable;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 48,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isEnable ? onPressed : null,
         style: ButtonStyle(
           elevation: WidgetStatePropertyAll(0),
           backgroundColor: WidgetStatePropertyAll(
-            backgroundColor ?? GeneralColors.primaryColor,
+            isEnable ? backgroundColor ?? GeneralColors.primaryColor : GeneralColors.secondaryGrayColor,
           ),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/general_scaffold.dart';
+import 'package:goodali/utils/globals.dart';
 
 class TermPage extends StatefulWidget {
   const TermPage({super.key});
@@ -22,12 +23,12 @@ class _TermPageState extends State<TermPage> {
   }
 
   Future<void> getHtml() async {
-    // showLoader();
+    showLoader();
     final response = await rootBundle.loadString('assets/goodali.html');
     setState(() {
       htmlData = response;
     });
-    // dismissLoader();
+    dismissLoader();
   }
 
   @override

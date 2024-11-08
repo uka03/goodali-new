@@ -43,7 +43,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _homeProvider = Provider.of<HomeProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showLoader();
       await _homeProvider.getHomeData();
+      dismissLoader();
     });
   }
 

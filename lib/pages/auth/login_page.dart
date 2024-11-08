@@ -10,6 +10,7 @@ import 'package:goodali/shared/components/keyboard_hider.dart';
 import 'package:goodali/shared/components/primary_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/extensions/string_extensions.dart';
@@ -129,6 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () async {
                         if (_formKey.currentState?.validate() == true) {
                           FocusScope.of(context).unfocus();
+                          showLoader();
                           final response = await _authProvider.checkUser(
                             _controller.text,
                           );
@@ -154,6 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                               description: response.message,
                             );
                           }
+                          dismissLoader();
                         }
                       },
                       title: "Нэвтрэх",

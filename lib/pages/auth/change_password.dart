@@ -5,6 +5,7 @@ import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/keyboard_hider.dart';
 import 'package:goodali/shared/components/primary_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/utils/toasts.dart';
@@ -48,7 +49,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     if (_confirmPinCode.text.length < 4 || _newPinCode.text.length < 4 || _oldPinCode.text.length < 4) {
                       Toast.error(context, description: "Пин код дутуу байна.");
                     } else {
-                      // showLoader();
+                      showLoader();
                       final response = await authProvider.changePassword(_oldPinCode.text, _confirmPinCode.text);
                       if (response.success == true) {
                         if (context.mounted) {
@@ -60,7 +61,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           Toast.error(context, description: response.error ?? response.message);
                         }
                       }
-                      // dismissLoader();
+                      dismissLoader();
                     }
                   } else {
                     Toast.error(context, description: "Пин код тохирохгүй байна.");

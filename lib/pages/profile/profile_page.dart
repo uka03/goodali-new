@@ -7,6 +7,7 @@ import 'package:goodali/pages/home/components/type_bar.dart';
 import 'package:goodali/pages/lesson/item_page.dart';
 import 'package:goodali/pages/menu/menu_page.dart';
 import 'package:goodali/pages/podcast/components/podcast_item.dart';
+import 'package:goodali/pages/profile/profile_edit.dart';
 import 'package:goodali/pages/profile/provider/profile_provider.dart';
 import 'package:goodali/shared/components/action_item.dart';
 import 'package:goodali/shared/components/cached_image.dart';
@@ -37,9 +38,11 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
     _profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _authProvider.getMe();
-      _profileProvider.getUserData();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showLoader();
+      await _authProvider.getMe();
+      await _profileProvider.getUserData();
+      dismissLoader();
     });
   }
 
@@ -281,7 +284,7 @@ class ProfileItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                user?.nickname ?? "",
+                user?.nickname ?? "Хэрэглэгч",
                 style: GeneralTextStyle.titleText(fontSize: 20),
               ),
               VSpacer.xs(),
@@ -296,11 +299,16 @@ class ProfileItem extends StatelessWidget {
           ),
         ),
         HSpacer(),
-        Text(
-          "Засах",
-          style: GeneralTextStyle.bodyText(
-            fontSize: 14,
-            textColor: GeneralColors.primaryColor,
+        CustomButton(
+          onTap: () {
+            Navigator.pushNamed(context, ProfileEdit.path);
+          },
+          child: Text(
+            "Засах",
+            style: GeneralTextStyle.bodyText(
+              fontSize: 14,
+              textColor: GeneralColors.primaryColor,
+            ),
           ),
         ),
       ],

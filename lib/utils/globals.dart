@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:goodali/utils/types.dart';
 
 final bottomItems = [
@@ -33,4 +34,12 @@ class TypeItem {
     this.title,
     this.index,
   );
+}
+
+showLoader() {
+  EasyLoading.show();
+}
+
+dismissLoader() {
+  EasyLoading.dismiss();
 }

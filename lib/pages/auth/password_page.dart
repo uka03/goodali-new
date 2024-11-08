@@ -6,6 +6,7 @@ import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:goodali/utils/text_styles.dart';
@@ -52,6 +53,7 @@ class _PasswordPageState extends State<PasswordPage> {
       switch (info.authType) {
         case AuthType.login:
           info.pass = pinValue;
+          showLoader();
           final response = await _authProvider.login(info);
           if (response.data?.token?.isNotEmpty == true) {
             if (mounted) {
@@ -60,6 +62,7 @@ class _PasswordPageState extends State<PasswordPage> {
           } else if (mounted) {
             Toast.error(context, description: response.error);
           }
+          dismissLoader();
           break;
         case AuthType.register:
           info.pass = pinValue;
@@ -70,6 +73,7 @@ class _PasswordPageState extends State<PasswordPage> {
           break;
         case AuthType.registerConfirm:
           if (info.pass == pinValue) {
+            showLoader();
             final response = await _authProvider.register(info);
             if (response.success == true) {
               if (mounted) {
@@ -79,6 +83,7 @@ class _PasswordPageState extends State<PasswordPage> {
             } else if (mounted) {
               Toast.error(context, description: response.error);
             }
+            dismissLoader();
           } else {
             Toast.error(context, description: "Пин код адилхан байх ёстой");
           }
@@ -92,6 +97,7 @@ class _PasswordPageState extends State<PasswordPage> {
           break;
         case AuthType.forgotConfirm:
           if (info.pass == pinValue) {
+            showLoader();
             final response = await _authProvider.forgetPassword(info);
             if (response.success == true) {
               if (mounted) {
@@ -101,6 +107,7 @@ class _PasswordPageState extends State<PasswordPage> {
             } else if (mounted) {
               Toast.error(context, description: response.error);
             }
+            dismissLoader();
           } else {
             Toast.error(context, description: "Пин код адилхан байх ёстой");
           }

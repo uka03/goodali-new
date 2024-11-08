@@ -8,6 +8,7 @@ import 'package:goodali/pages/podcast/podcast_player.dart';
 import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/utils/utils.dart';
@@ -33,9 +34,11 @@ class _MoodDetailState extends State<MoodDetail> {
     _provider = Provider.of<MoodProvider>(context, listen: false);
     _playerProvider = Provider.of<PlayerProvider>(context, listen: false);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final id = ModalRoute.of(context)?.settings.arguments as int?;
-      _provider.getMoodItems(id);
+      showLoader();
+      await _provider.getMoodItems(id);
+      dismissLoader();
     });
   }
 

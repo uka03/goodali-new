@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:goodali/connection/dio_client.dart';
 import 'package:goodali/connection/model/base_response.dart';
 import 'package:goodali/connection/model/faq_response.dart';
 import 'package:goodali/connection/model/login_response.dart';
+import 'package:goodali/connection/model/upload_response.dart';
 import 'package:goodali/connection/model/user_response.dart';
 import 'package:goodali/utils/types.dart';
 
@@ -89,5 +92,26 @@ class AuthProvider extends ChangeNotifier {
   Future<BaseResponse> changePassword(String? current, String? password) async {
     final response = await _dio.changePassword(current, password);
     return response;
+  }
+
+  Future<BaseResponse> uploadAvatar(File? file) async {
+    final response = await _dio.uploadImage(file);
+    if (response.success == true) {
+      final imagePaths = response.data?.firstWhere(
+        (e) => e.label == "small",
+        orElse: () => UploadResponseData(
+          filePath: null,
+          label: null,
+          url: null,
+        ),
+      );
+      final imResponse = await _dio.uploadAvatar(imagePaths?.filePath);
+      return imResponse;
+    }
+    return response;
+  }
+
+  Future<UserResponse> userUpdate(String? nickName) async {
+    return await _dio.updateMe(nickName);
   }
 }

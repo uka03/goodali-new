@@ -31,8 +31,9 @@ class _VideoDetailState extends State<VideoDetail> {
   void initState() {
     super.initState();
     provider = Provider.of<VideoProvider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final videoInitial = ModalRoute.of(context)?.settings.arguments as VideoResponseData?;
+
       provider.getSimilarVideos(videoInitial?.id);
       setState(() {
         video = videoInitial;

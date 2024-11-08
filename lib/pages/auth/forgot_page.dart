@@ -7,6 +7,7 @@ import 'package:goodali/shared/components/auth_text_field.dart';
 import 'package:goodali/shared/components/keyboard_hider.dart';
 import 'package:goodali/shared/components/primary_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/extensions/string_extensions.dart';
@@ -91,6 +92,7 @@ class _ForgotPageState extends State<ForgotPage> {
                     onPressed: () async {
                       if (_formKey.currentState?.validate() == true) {
                         FocusScope.of(context).unfocus();
+                        showLoader();
                         final response = await _authProvider.sendOTP(
                           _controller.text,
                         );
@@ -108,6 +110,7 @@ class _ForgotPageState extends State<ForgotPage> {
                             description: response.error ?? response.message,
                           );
                         }
+                        dismissLoader();
                       }
                     },
                     title: "Үргэлжлүүлэх",

@@ -12,9 +12,11 @@ import 'package:goodali/pages/search/provider/search_provider.dart';
 import 'package:goodali/pages/training/provider/training_provider.dart';
 import 'package:goodali/pages/video/provider/video_provider.dart';
 import 'package:goodali/routes/routes.dart';
+import 'package:goodali/shared/components/custom_animation.dart';
 import 'package:goodali/shared/provider/navigator_provider.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async {
   await JustAudioBackground.init(
@@ -49,7 +51,24 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: routes,
+        builder: EasyLoading.init(),
       ),
     );
+  }
+
+  void configLoading() {
+    EasyLoading.instance
+      ..maskType = EasyLoadingMaskType.custom
+      ..displayDuration = const Duration(milliseconds: 1000)
+      ..loadingStyle = EasyLoadingStyle.light
+      ..indicatorSize = 60
+      ..textColor = Colors.white
+      ..backgroundColor = Colors.transparent
+      ..indicatorColor = Colors.white
+      ..maskColor = Colors.transparent
+      ..userInteractions = false
+      ..dismissOnTap = false
+      ..animationStyle = EasyLoadingAnimationStyle.custom
+      ..customAnimation = CustomAnimation();
   }
 }

@@ -7,6 +7,7 @@ import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/primary_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:provider/provider.dart';
@@ -27,9 +28,11 @@ class _TrainingPageState extends State<TrainingPage> {
   void initState() {
     super.initState();
     _trainingProvider = Provider.of<TrainingProvider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final id = ModalRoute.of(context)?.settings.arguments as int?;
-      _trainingProvider.getTraining(id);
+      showLoader();
+      await _trainingProvider.getTraining(id);
+      dismissLoader();
     });
   }
 

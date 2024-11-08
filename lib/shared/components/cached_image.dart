@@ -31,8 +31,11 @@ class CachedImage extends StatelessWidget {
 
   // Function to generate a resized URL (if the server supports dynamic resizing)
   String _getResizedImageUrl() {
-    String modifiedUrl = imageUrl.replaceFirst('/uploads/', '/uploads/$size/');
-    return modifiedUrl;
+    if (imageUrl.contains("goodali") && !(imageUrl.contains("/uploads/xs/") || imageUrl.contains("/uploads/medium/") || imageUrl.contains("/uploads/small/") || imageUrl.contains("/uploads/blur/") || imageUrl.contains("/uploads/large/"))) {
+      String modifiedUrl = imageUrl.replaceFirst('/uploads/', '/uploads/$size/');
+      return modifiedUrl;
+    }
+    return imageUrl;
   }
 
   @override

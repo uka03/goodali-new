@@ -6,6 +6,7 @@ import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,9 @@ class _LessonPageState extends State<LessonPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final item = ModalRoute.of(context)?.settings.arguments as LessonResponseData?;
       if (item != null) {
-        _provider.getTraingingLesson(item);
+        showLoader();
+        await _provider.getTraingingLesson(item);
+        dismissLoader();
       }
     });
   }
@@ -65,7 +68,9 @@ class _LessonPageState extends State<LessonPage> {
                 child: RefreshIndicator(
                   color: GeneralColors.primaryColor,
                   onRefresh: () async {
+                    showLoader();
                     await context.read<TrainingProvider>().getTraingingLesson(item);
+                    dismissLoader();
                   },
                   child: ListView.separated(
                     itemCount: items.length,
