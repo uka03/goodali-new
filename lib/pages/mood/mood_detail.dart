@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:goodali/connection/model/mood_response.dart';
 import 'package:goodali/connection/model/podcast_response.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/mood/provider/mood_provider.dart';
@@ -35,8 +34,8 @@ class _MoodDetailState extends State<MoodDetail> {
     _playerProvider = Provider.of<PlayerProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final mood = ModalRoute.of(context)?.settings.arguments as MoodResponseData?;
-      _provider.getMoodItems(mood?.id);
+      final id = ModalRoute.of(context)?.settings.arguments as int?;
+      _provider.getMoodItems(id);
     });
   }
 
@@ -44,6 +43,7 @@ class _MoodDetailState extends State<MoodDetail> {
   void dispose() {
     super.dispose();
     _playerProvider.setPlayerState(CustomState.disposed);
+    _provider.moodDetails = [];
   }
 
   @override

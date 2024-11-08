@@ -28,7 +28,7 @@ class ArticleItem extends StatelessWidget {
           onPressed!();
           return;
         }
-        Navigator.pushNamed(context, ArticleDetail.path, arguments: post);
+        Navigator.pushNamed(context, ArticleDetail.path, arguments: post?.id);
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

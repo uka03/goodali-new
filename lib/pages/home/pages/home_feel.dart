@@ -53,7 +53,11 @@ class HomeFeel extends StatelessWidget {
               final mood = homeData.moods[index];
               return CustomButton(
                 onTap: () {
-                  Navigator.pushNamed(context, MoodDetail.path, arguments: mood);
+                  Navigator.pushNamed(
+                    context,
+                    MoodDetail.path,
+                    arguments: mood.id,
+                  );
                 },
                 child: Column(
                   children: [

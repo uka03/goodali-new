@@ -9,6 +9,7 @@ import 'package:goodali/pages/home/pages/home_listen.dart';
 import 'package:goodali/pages/home/pages/home_read.dart';
 import 'package:goodali/pages/home/pages/home_training.dart';
 import 'package:goodali/pages/home/provider/home_provider.dart';
+import 'package:goodali/pages/search/search_page.dart';
 import 'package:goodali/pages/training/training_page.dart';
 import 'package:goodali/shared/components/action_item.dart';
 import 'package:goodali/shared/components/cached_image.dart';
@@ -118,6 +119,10 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: CustomTextField(
                         controller: _searchController,
+                        onTap: () {
+                          Navigator.pushNamed(context, SearchPage.path);
+                        },
+                        readonly: true,
                       ),
                     ),
                   ),

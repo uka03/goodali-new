@@ -12,6 +12,7 @@ import 'package:goodali/connection/model/order_response.dart';
 import 'package:goodali/connection/model/podcast_response.dart';
 import 'package:goodali/connection/model/post_response.dart';
 import 'package:goodali/connection/model/purchase_response.dart';
+import 'package:goodali/connection/model/search_response.dart';
 import 'package:goodali/connection/model/tag_response.dart';
 import 'package:goodali/connection/model/training_response.dart';
 import 'package:goodali/connection/model/user_response.dart';
@@ -303,6 +304,18 @@ class DioClient {
     }
   }
 
+  Future<PodcastResponseData> getPodcast(int? id) async {
+    try {
+      final response = await _dioClient.get("$baseUrl$podcastUrl/$id");
+      final model = PodcastResponseData.fromJson(response.data["data"]);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = PodcastResponseData.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
   Future<VideoResponse> getVideos({String? page, String? limit}) async {
     try {
       final response = await _dioClient.get("$baseUrl$videoUrl?page=$page&limit=$limit");
@@ -347,6 +360,18 @@ class DioClient {
     } catch (e) {
       final dioFailure = e as DioException?;
       final error = PostResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<PostResponseData> getPostById(int? id) async {
+    try {
+      final response = await _dioClient.get("$baseUrl$postUrl/$id");
+      final model = PostResponseData.fromJson(response.data["data"]);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = PostResponseData.fromJson(dioFailure?.response?.data);
       return error;
     }
   }
@@ -633,6 +658,23 @@ class DioClient {
     } catch (e) {
       final dioFailure = e as DioException?;
       final error = TagResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<SearchResponse> getSearch(String? text) async {
+    try {
+      final response = await _dioClient.post(
+        "$baseUrl/search",
+        data: {
+          "text": text,
+        },
+      );
+      final model = SearchResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = SearchResponse.fromJson(dioFailure?.response?.data);
       return error;
     }
   }

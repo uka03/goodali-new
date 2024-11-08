@@ -32,15 +32,16 @@ class _ArticleDetailState extends State<ArticleDetail> {
     super.initState();
     _articleProvider = Provider.of<ArticleProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final postArg = ModalRoute.of(context)?.settings.arguments as PostResponseData?;
-      _fetchData(postArg);
+      final id = ModalRoute.of(context)?.settings.arguments as int?;
+      _fetchData(id);
     });
   }
 
-  _fetchData(PostResponseData? data) {
-    _articleProvider.getSimilarArticles(data?.id);
+  _fetchData(int? id) async {
+    final response = await _articleProvider.getPostById(id);
+    _articleProvider.getSimilarArticles(id);
     setState(() {
-      post = data;
+      post = response;
     });
   }
 
@@ -92,7 +93,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           duration: Duration(milliseconds: 300),
                           curve: Easing.linear,
                         );
-                        _fetchData(simPost);
+                        _fetchData(simPost.id);
                       },
                     );
                   },

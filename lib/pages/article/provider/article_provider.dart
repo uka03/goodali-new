@@ -13,6 +13,12 @@ class ArticleProvider extends ChangeNotifier {
     return response;
   }
 
+  Future<PostResponseData> getPostById(int? id) async {
+    final response = await _dioClient.getPostById(id);
+
+    return response;
+  }
+
   Future<void> getSimilarArticles(int? id) async {
     similarArticles = [];
     notifyListeners();

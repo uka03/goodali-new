@@ -13,10 +13,11 @@ class CustomTextField extends StatelessWidget {
     this.readonly = false,
     this.withIcon = true,
     this.onTap,
+    this.onChange,
   });
 
   final TextEditingController controller;
-  final String? Function(String? value)? validator;
+  final String? Function(String? value)? validator, onChange;
   final String? hintText;
   final TextInputType? keyboardType;
   final bool readonly;
@@ -47,6 +48,9 @@ class CustomTextField extends StatelessWidget {
               return null;
             },
             onChanged: (value) {
+              if (onChange != null) {
+                onChange!(value);
+              }
               if (value.isNotEmpty) {
                 if (!isTyping.value) {
                   isTyping.value = true;

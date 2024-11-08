@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:goodali/connection/model/podcast_response.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/podcast/components/audio_controls.dart';
@@ -27,7 +26,8 @@ class _PodcastPlayerState extends State<PodcastPlayer> {
     super.initState();
     _playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final data = ModalRoute.of(context)?.settings.arguments as PodcastResponseData?;
+      final id = ModalRoute.of(context)?.settings.arguments as int?;
+      final data = await _playerProvider.getPodcastById(id);
       await _playerProvider.init(data);
     });
   }

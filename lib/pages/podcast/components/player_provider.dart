@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:goodali/connection/dio_client.dart';
 import 'package:goodali/connection/model/podcast_response.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/utils/globals.dart';
@@ -9,6 +10,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlayerProvider extends ChangeNotifier {
+  final _dioClient = DioClient();
   PodcastResponseData? data;
   AudioPlayer? audioPlayer;
   StreamSubscription? sub;
@@ -24,6 +26,10 @@ class PlayerProvider extends ChangeNotifier {
           duration: duration ?? Duration.zero,
         ),
       );
+
+  Future<PodcastResponseData> getPodcastById(int? id) async {
+    return await _dioClient.getPodcast(id);
+  }
 
   init(PodcastResponseData? item) async {
     if (item?.id == data?.id) {

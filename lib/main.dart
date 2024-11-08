@@ -8,6 +8,7 @@ import 'package:goodali/pages/home/provider/home_provider.dart';
 import 'package:goodali/pages/mood/provider/mood_provider.dart';
 import 'package:goodali/pages/podcast/components/player_provider.dart';
 import 'package:goodali/pages/profile/provider/profile_provider.dart';
+import 'package:goodali/pages/search/provider/search_provider.dart';
 import 'package:goodali/pages/training/provider/training_provider.dart';
 import 'package:goodali/pages/video/provider/video_provider.dart';
 import 'package:goodali/routes/routes.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         ChangeNotifierProvider(create: (context) => PlayerProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => SearchProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

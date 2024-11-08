@@ -51,7 +51,7 @@ class PodcastItem extends StatelessWidget {
       builder: (context, provider, _) {
         return CustomButton(
           onTap: () {
-            Navigator.pushNamed(context, PodcastPlayer.path, arguments: podcast);
+            Navigator.pushNamed(context, PodcastPlayer.path, arguments: podcast?.id);
           },
           child: Column(
             children: [
