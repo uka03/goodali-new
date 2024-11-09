@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/album/album_detail.dart';
+import 'package:goodali/pages/auth/provider/auth_provider.dart';
 import 'package:goodali/pages/cart/payment_page.dart';
 import 'package:goodali/pages/cart/provider/cart_provider.dart';
 import 'package:goodali/pages/training/training_page.dart';
@@ -14,6 +15,7 @@ import 'package:goodali/utils/empty_state.dart';
 import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
+import 'package:goodali/utils/toasts.dart';
 import 'package:goodali/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -28,12 +30,15 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   late final CartProvider _cartProvider;
+  late final AuthProvider _authProvider;
   @override
   void initState() {
     super.initState();
-    _cartProvider = Provider.of(context, listen: false);
+    _cartProvider = Provider.of<CartProvider>(context, listen: false);
+    _authProvider = Provider.of<AuthProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _cartProvider.getItems();
+      _authProvider.getMe();
     });
   }
 
@@ -66,7 +71,18 @@ class _CartPageState extends State<CartPage> {
                   PrimaryButton(
                     isEnable: cartItem?.isNotEmpty == true,
                     onPressed: () {
-                      Navigator.pushNamed(context, PaymentPage.path);
+                      if (_authProvider.user != null) {
+                        if (_authProvider.user?.email != "surgalt9@gmail.com") {
+                          Navigator.pushNamed(context, PaymentPage.path);
+                        } else {
+                          Toast.error(
+                            context,
+                            description: "Та goodali.mn сайтаар орж худалдан авалт хийнэ үү.",
+                          );
+                        }
+                      } else {
+                        Toast.error(context, description: "Та эхлээд нэвтрэх хэрэгтэй");
+                      }
                     },
                     title: "Худалдаж авах",
                   ),
