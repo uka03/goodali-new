@@ -3,7 +3,7 @@ import 'package:goodali/connection/model/purchase_response.dart';
 import 'package:goodali/connection/model/user_response.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/auth/provider/auth_provider.dart';
-import 'package:goodali/pages/home/components/type_bar.dart';
+// import 'package:goodali/pages/home/components/type_bar.dart';
 import 'package:goodali/pages/lesson/item_page.dart';
 import 'package:goodali/pages/menu/menu_page.dart';
 import 'package:goodali/pages/podcast/components/podcast_item.dart';
@@ -135,19 +135,19 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          SliverToBoxAdapter(
-                            child: VSpacer(),
-                          ),
-                          SliverPersistentHeader(
-                            pinned: true,
-                            delegate: _StickyHeaderDelegate(
-                              child: TypeBar(
-                                onChanged: navigatorProvider.setProfile,
-                                selectedType: navigatorProvider.profileSelectedPage,
-                                typeItems: profileTypes,
-                              ),
-                            ),
-                          ),
+                          // SliverToBoxAdapter(
+                          //   child: VSpacer(),
+                          // ),
+                          // SliverPersistentHeader(
+                          //   pinned: true,
+                          //   delegate: _StickyHeaderDelegate(
+                          //     child: TypeBar(
+                          //       onChanged: navigatorProvider.setProfile,
+                          //       selectedType: navigatorProvider.profileSelectedPage,
+                          //       typeItems: profileTypes,
+                          //     ),
+                          //   ),
+                          // ),
                         ];
                       },
                     );

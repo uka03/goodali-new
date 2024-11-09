@@ -9,6 +9,8 @@ import 'package:goodali/connection/model/training_response.dart';
 import 'package:goodali/connection/model/video_response.dart';
 import 'package:goodali/pages/album/albums_page.dart';
 import 'package:goodali/pages/article/articles_page.dart';
+import 'package:goodali/pages/podcast/podcasts_page.dart';
+import 'package:goodali/pages/video/videos_page.dart';
 
 class HomeProvider extends ChangeNotifier {
   final _dioClient = DioClient();
@@ -76,7 +78,7 @@ class HomeProvider extends ChangeNotifier {
         homeFeel.add(
           HomeDataType(
             title: "Подкаст",
-            path: "/",
+            path: PodcastsPage.path,
             item: HomeFeelItems(
               podcast: podcast,
             ),
@@ -98,7 +100,7 @@ class HomeProvider extends ChangeNotifier {
         homeFeel.add(
           HomeDataType(
             title: "Видео",
-            path: "/",
+            path: VideosPage.path,
             item: HomeFeelItems(
               video: video,
             ),
@@ -185,8 +187,8 @@ class HomeProvider extends ChangeNotifier {
     return response.data ?? [];
   }
 
-  Future<List<PodcastResponseData>> getPodcasts() async {
-    final response = await _dioClient.getPodcasts(limit: 4, page: 1);
+  Future<List<PodcastResponseData>> getPodcasts({int limit = 4, int page = 1}) async {
+    final response = await _dioClient.getPodcasts(limit: limit, page: page);
     return response.data ?? [];
   }
 

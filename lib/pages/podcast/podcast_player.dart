@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:goodali/connection/model/podcast_response.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/podcast/components/audio_controls.dart';
 import 'package:goodali/pages/podcast/components/player_provider.dart';
@@ -7,6 +9,7 @@ import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/dailogs.dart';
 import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
@@ -27,9 +30,14 @@ class _PodcastPlayerState extends State<PodcastPlayer> {
     super.initState();
     _playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final id = ModalRoute.of(context)?.settings.arguments as int?;
+      final arg = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
       showLoader();
-      final data = await _playerProvider.getPodcastById(id);
+      PodcastResponseData? data;
+      if (arg["data"] != null) {
+        data = arg["data"];
+      } else {
+        data = await _playerProvider.getPodcastById(arg["id"]);
+      }
       dismissLoader();
       await _playerProvider.init(data);
     });
@@ -43,94 +51,80 @@ class _PodcastPlayerState extends State<PodcastPlayer> {
           backgroundColor: GeneralColors.primaryBGColor,
           appBar: CustomAppBar(),
           body: SafeArea(
-            child: PageView(
-              physics: NeverScrollableScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                CachedImage(
+                  imageUrl: provider.data?.banner.toUrl() ?? "",
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: MediaQuery.of(context).size.width * 0.6,
+                  size: "small",
+                  borderRadius: 12,
+                ),
+                Text(
+                  provider.data?.title.toString() ?? "",
+                  style: GeneralTextStyle.titleText(fontSize: 24),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CachedImage(
-                      imageUrl: provider.data?.banner.toUrl() ?? "",
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      height: MediaQuery.of(context).size.width * 0.6,
-                      size: "small",
-                      borderRadius: 12,
-                    ),
-                    Text(
-                      provider.data?.title.toString() ?? "",
-                      style: GeneralTextStyle.titleText(fontSize: 24),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomButton(
-                          onTap: () {},
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.arrow_downward_rounded,
-                                size: 30,
-                                color: GeneralColors.grayColor,
-                              ),
-                              VSpacer.sm(),
-                              Text(
-                                "Татах",
-                                style: GeneralTextStyle.bodyText(),
-                              )
-                            ],
-                          ),
-                        ),
-                        HSpacer(size: 80),
-                        CustomButton(
-                          onTap: () {},
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                "assets/icons/ic_info_menu.png",
-                                width: 30,
-                                height: 30,
-                                color: GeneralColors.grayColor,
-                              ),
-                              VSpacer.sm(),
-                              Text(
-                                "Татах",
-                                style: GeneralTextStyle.bodyText(),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    StreamBuilder<SeekBarData>(
-                      stream: provider.streamController?.stream,
-                      builder: (context, snapshot) {
-                        final positionData = snapshot.data;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                          child: Column(
-                            children: [
-                              CustomProgressBar(
-                                progress: positionData?.position,
-                                total: positionData?.duration,
-                                buffered: positionData?.bufferedPosition,
-                                onSeek: (value) {
-                                  provider.audioPlayer?.seek(value);
-                                },
-                              ),
-                              VSpacer(),
-                              AudioControls(
-                                audioProvider: provider,
-                                positionData: positionData,
-                              ),
-                              VSpacer(),
-                            ],
+                    CustomButton(
+                      onTap: () {
+                        showModalSheet(
+                          context,
+                          child: SingleChildScrollView(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: HtmlWidget(provider.data?.body ?? ""),
+                            ),
                           ),
                         );
                       },
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/icons/ic_info_menu.png",
+                            width: 30,
+                            height: 30,
+                            color: GeneralColors.grayColor,
+                          ),
+                          VSpacer.sm(),
+                          Text(
+                            "Тайлбар",
+                            style: GeneralTextStyle.bodyText(),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                Container(),
+                StreamBuilder<SeekBarData>(
+                  stream: provider.streamController?.stream,
+                  builder: (context, snapshot) {
+                    final positionData = snapshot.data;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                      child: Column(
+                        children: [
+                          CustomProgressBar(
+                            progress: positionData?.position,
+                            total: positionData?.duration,
+                            buffered: positionData?.bufferedPosition,
+                            onSeek: (value) {
+                              provider.audioPlayer?.seek(value);
+                            },
+                          ),
+                          VSpacer(),
+                          AudioControls(
+                            audioProvider: provider,
+                            positionData: positionData,
+                          ),
+                          VSpacer(),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),

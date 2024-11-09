@@ -228,6 +228,7 @@ class TextTask extends StatelessWidget {
             ),
           if (item.isAnswer == 1)
             AuthTextField(
+              extend: true,
               controller: controller,
               hintText: "Хариулт",
               onClear: () {

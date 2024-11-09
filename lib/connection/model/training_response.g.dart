@@ -128,6 +128,7 @@ PackageResponseData _$PackageResponseDataFromJson(Map<String, dynamic> json) =>
       status: (json['status'] as num?)?.toInt(),
       trainingId: (json['training_id'] as num?)?.toInt(),
       name: json['name'] as String?,
+      isPaid: json['isPaid'] as bool?,
     );
 
 Map<String, dynamic> _$PackageResponseDataToJson(
@@ -144,4 +145,5 @@ Map<String, dynamic> _$PackageResponseDataToJson(
       'product_id': instance.productId,
       'created_at': instance.createdAt,
       'openned_date': instance.opennedDate,
+      'isPaid': instance.isPaid,
     };

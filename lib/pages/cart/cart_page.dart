@@ -64,6 +64,7 @@ class _CartPageState extends State<CartPage> {
                   ),
                   VSpacer(),
                   PrimaryButton(
+                    isEnable: cartItem?.isNotEmpty == true,
                     onPressed: () {
                       Navigator.pushNamed(context, PaymentPage.path);
                     },

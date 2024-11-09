@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:goodali/extensions/string_extensions.dart';
+import 'package:goodali/pages/auth/provider/auth_provider.dart';
 import 'package:goodali/pages/training/packages_page.dart';
 import 'package:goodali/pages/training/provider/training_provider.dart';
 import 'package:goodali/shared/components/cached_image.dart';
@@ -23,15 +24,18 @@ class TrainingPage extends StatefulWidget {
 
 class _TrainingPageState extends State<TrainingPage> {
   late final TrainingProvider _trainingProvider;
+  late final AuthProvider _authProvider;
 
   @override
   void initState() {
     super.initState();
     _trainingProvider = Provider.of<TrainingProvider>(context, listen: false);
+    _authProvider = Provider.of<AuthProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final id = ModalRoute.of(context)?.settings.arguments as int?;
       showLoader();
       await _trainingProvider.getTraining(id);
+      await _authProvider.getMe();
       dismissLoader();
     });
   }
@@ -54,6 +58,7 @@ class _TrainingPageState extends State<TrainingPage> {
           padding: EdgeInsets.fromLTRB(16, 8, 16, 32),
           color: Colors.transparent,
           child: PrimaryButton(
+            isEnable: _authProvider.user != null && (detail?.canPurchase ?? false),
             onPressed: () {
               Navigator.pushNamed(
                 context,

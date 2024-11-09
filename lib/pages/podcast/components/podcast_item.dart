@@ -2,6 +2,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/podcast_response.dart';
 import 'package:goodali/extensions/string_extensions.dart';
+import 'package:goodali/pages/auth/provider/auth_provider.dart';
 import 'package:goodali/pages/cart/provider/cart_provider.dart';
 import 'package:goodali/pages/podcast/components/player_provider.dart';
 import 'package:goodali/pages/podcast/podcast_player.dart';
@@ -10,6 +11,7 @@ import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/utils/colors.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
+import 'package:goodali/utils/toasts.dart';
 import 'package:goodali/utils/utils.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +30,14 @@ class PodcastItem extends StatelessWidget {
       if (podcast?.isPaid == false) {
         return CustomButton(
           onTap: () {
-            final cart = context.read<CartProvider>();
-            cart.addCart(podcast?.productId);
+            final user = context.read<AuthProvider>().user;
+            if (user != null) {
+              final cart = context.read<CartProvider>();
+              cart.addCart(podcast?.productId);
+              Toast.success(context, description: "Сагсанд нэмэгдлээ.");
+            } else {
+              Toast.error(context, description: "Та нэвтрэх хэрэгтэй.");
+            }
           },
           child: Image.asset(
             "assets/icons/ic_cart.png",
@@ -41,17 +49,17 @@ class PodcastItem extends StatelessWidget {
       // if (podcast?.isPaid == true) {
       //   return SizedBox();
       // }
-      return Icon(
-        Icons.arrow_downward_rounded,
-        color: GeneralColors.grayColor,
-      );
+      return SizedBox();
     }
 
     return Consumer<PlayerProvider>(
       builder: (context, provider, _) {
         return CustomButton(
           onTap: () {
-            Navigator.pushNamed(context, PodcastPlayer.path, arguments: podcast?.id);
+            Navigator.pushNamed(context, PodcastPlayer.path, arguments: {
+              "id": podcast?.id,
+              "data": podcast,
+            });
           },
           child: Column(
             children: [
@@ -207,16 +215,7 @@ class PodcastItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Row(
-                    children: [
-                      actionBtn(),
-                      HSpacer(),
-                      Icon(
-                        Icons.more_horiz,
-                        color: GeneralColors.grayColor,
-                      )
-                    ],
-                  )
+                  actionBtn(),
                 ],
               ),
             ],

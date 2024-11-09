@@ -9,7 +9,6 @@ import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/components/custom_dropdown.dart';
-import 'package:goodali/shared/components/custom_read_more.dart';
 import 'package:goodali/shared/components/custom_text_field.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
@@ -190,9 +189,9 @@ class _FeedDetailState extends State<FeedDetail> {
                   style: GeneralTextStyle.titleText(),
                 ),
                 VSpacer(),
-                CustomReadMore(
-                  text: item.body ?? "",
-                  trimLines: 5,
+                Text(
+                  item.body ?? "",
+                  textAlign: TextAlign.center,
                 ),
                 VSpacer(size: 30),
                 Row(

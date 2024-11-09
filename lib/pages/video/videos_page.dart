@@ -62,7 +62,7 @@ class _VideosPageState extends State<VideosPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
-              "Цомог",
+              "Видео",
               style: GeneralTextStyle.titleText(fontSize: 32),
             ),
           ),

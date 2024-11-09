@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 
 class HomeTitle extends StatelessWidget {
@@ -27,10 +28,22 @@ class HomeTitle extends StatelessWidget {
             onTap: () {
               onPressed!();
             },
-            child: Icon(
-              Icons.arrow_forward,
-              size: 28,
-              color: GeneralColors.grayColor,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+              decoration: BoxDecoration(color: GeneralColors.grayBGColor, borderRadius: BorderRadius.circular(8)),
+              child: Row(
+                children: [
+                  Text(
+                    "Бүгд",
+                    style: GeneralTextStyle.bodyText(fontSize: 16),
+                  ),
+                  HSpacer.sm(),
+                  Icon(
+                    Icons.arrow_forward,
+                    size: 18,
+                  )
+                ],
+              ),
             ),
           )
       ],

@@ -118,6 +118,8 @@ class PackageResponseData {
   final String? createdAt;
   @JsonKey(name: "openned_date")
   final String? opennedDate;
+  final bool? isPaid;
+
   PackageResponseData({
     required this.banner,
     required this.body,
@@ -130,6 +132,7 @@ class PackageResponseData {
     required this.status,
     required this.trainingId,
     required this.name,
+    required this.isPaid,
   });
 
   factory PackageResponseData.fromJson(Map<String, dynamic> json) => _$PackageResponseDataFromJson(json);

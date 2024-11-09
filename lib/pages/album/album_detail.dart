@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/album_response.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/album/provider/album_provider.dart';
+import 'package:goodali/pages/auth/provider/auth_provider.dart';
 import 'package:goodali/pages/cart/cart_page.dart';
 import 'package:goodali/pages/cart/provider/cart_provider.dart';
 import 'package:goodali/pages/podcast/components/podcast_item.dart';
@@ -14,6 +15,7 @@ import 'package:goodali/utils/colors.dart';
 import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
+import 'package:goodali/utils/toasts.dart';
 import 'package:goodali/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -28,15 +30,18 @@ class AlbumDetail extends StatefulWidget {
 
 class _AlbumDetailState extends State<AlbumDetail> {
   late final AlbumProvider provider;
+  late final AuthProvider authProvider;
   @override
   void initState() {
     super.initState();
     provider = Provider.of<AlbumProvider>(context, listen: false);
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       showLoader();
       final id = ModalRoute.of(context)?.settings.arguments as int?;
       await provider.getAlbum(id);
+      await authProvider.getMe();
       dismissLoader();
     });
   }
@@ -54,10 +59,14 @@ class _AlbumDetailState extends State<AlbumDetail> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: PrimaryButton(
+                      isEnable: authProvider.user != null,
                       onPressed: () {
-                        final cart = context.read<CartProvider>();
-                        cart.addCart(album?.productId);
-                        Navigator.pushNamed(context, CartPage.path);
+                        if (authProvider.user != null) {
+                          final cart = context.read<CartProvider>();
+                          cart.addCart(album?.productId);
+                          Toast.success(context, description: "Сагсанд нэмэгдлээ.");
+                          Navigator.pushNamed(context, CartPage.path);
+                        }
                       },
                       title: "Худалдаж авах",
                     ),

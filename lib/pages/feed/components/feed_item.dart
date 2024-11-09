@@ -9,7 +9,6 @@ import 'package:goodali/pages/feed/provider/feed_provider.dart';
 import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/components/custom_dropdown.dart';
-import 'package:goodali/shared/components/custom_read_more.dart';
 import 'package:goodali/utils/colors.dart';
 import 'package:goodali/utils/dailogs.dart';
 import 'package:goodali/utils/spacer.dart';
@@ -147,9 +146,11 @@ class PostItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             VSpacer(),
-            CustomReadMore(
-              text: item.body ?? "",
-              trimLines: 5,
+            Text(
+              item.body ?? "",
+              textAlign: TextAlign.center,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
             ),
             VSpacer(),
             Row(
