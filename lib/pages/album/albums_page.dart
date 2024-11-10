@@ -70,7 +70,7 @@ class _AlbumsPageState extends State<AlbumsPage> {
               showNoMoreItemsIndicatorAsGridChild: false,
               pagingController: _pagingController,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 0.7,
+                childAspectRatio: 0.65,
                 crossAxisCount: 2,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
