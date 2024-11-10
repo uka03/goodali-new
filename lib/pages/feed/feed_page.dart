@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/feed_response.dart';
 import 'package:goodali/pages/auth/provider/auth_provider.dart';
 import 'package:goodali/pages/cart/cart_page.dart';
+import 'package:goodali/pages/cart/provider/cart_provider.dart';
 import 'package:goodali/pages/feed/components/feed_item.dart';
 import 'package:goodali/pages/feed/components/filter_page.dart';
 import 'package:goodali/pages/feed/create_post.dart';
@@ -121,10 +122,15 @@ class _FeedPageState extends State<FeedPage> {
               ),
             ),
             action: [
-              ActionItem(
-                iconPath: "assets/icons/ic_cart.png",
-                onPressed: () {
-                  Navigator.pushNamed(context, CartPage.path);
+              Consumer<CartProvider>(
+                builder: (context, cartProvider, _) {
+                  return ActionItem(
+                    iconPath: "assets/icons/ic_cart.png",
+                    count: cartProvider.cartData?.cartItems?.length,
+                    onPressed: () {
+                      Navigator.pushNamed(context, CartPage.path);
+                    },
+                  );
                 },
               ),
             ],

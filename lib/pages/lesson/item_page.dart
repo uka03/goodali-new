@@ -78,8 +78,11 @@ class _ItemPageState extends State<ItemPage> {
                       return TrainingItemTile(
                         item: items[index],
                         onClick: () async {
-                          await Navigator.pushNamed(context, LessonPage.path, arguments: items[index]);
-                          if (context.mounted) {}
+                          Navigator.pushNamed(
+                            context,
+                            LessonPage.path,
+                            arguments: items[index],
+                          );
                         },
                       );
                     },

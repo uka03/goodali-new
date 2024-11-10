@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/album/album_detail.dart';
 import 'package:goodali/pages/cart/cart_page.dart';
+import 'package:goodali/pages/cart/provider/cart_provider.dart';
 import 'package:goodali/pages/home/components/type_bar.dart';
 import 'package:goodali/pages/home/pages/home_feel.dart';
 import 'package:goodali/pages/home/pages/home_listen.dart';
@@ -61,10 +62,15 @@ class _HomePageState extends State<HomePage> {
               style: GeneralTextStyle.titleText(fontSize: 32),
             ),
             action: [
-              ActionItem(
-                iconPath: "assets/icons/ic_cart.png",
-                onPressed: () {
-                  Navigator.pushNamed(context, CartPage.path);
+              Consumer<CartProvider>(
+                builder: (context, cartProvider, _) {
+                  return ActionItem(
+                    iconPath: "assets/icons/ic_cart.png",
+                    count: cartProvider.cartData?.cartItems?.length,
+                    onPressed: () {
+                      Navigator.pushNamed(context, CartPage.path);
+                    },
+                  );
                 },
               ),
             ],

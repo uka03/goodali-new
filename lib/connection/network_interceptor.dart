@@ -10,7 +10,7 @@ class NetworkInterceptor extends Interceptor {
     try {
       final accessToken = await storage.read(key: 'token');
       if (accessToken != null) {
-        print(accessToken);
+        // print(accessToken);
         options.headers['Authorization'] = "Bearer $accessToken";
       }
     } on PlatformException catch (_) {

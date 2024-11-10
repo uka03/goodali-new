@@ -9,6 +9,7 @@ showAlertDialog(
   Widget? content,
   required VoidCallback onSuccess,
   required VoidCallback onDismiss,
+  List<Widget>? actions,
 }) {
   return showDialog<void>(
     context: context,
@@ -27,32 +28,33 @@ showAlertDialog(
         // insetPadding: insetPadding ?? EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
         title: title,
         content: content,
-        actions: <Widget>[
-          Column(
-            children: [
-              Row(
+        actions: actions ??
+            <Widget>[
+              Column(
                 children: [
-                  Expanded(
-                    child: PrimaryButton(
-                      title: "Үгүй",
-                      backgroundColor: GeneralColors.grayColor,
-                      onPressed: onDismiss,
-                      radius: 8,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: PrimaryButton(
+                          title: "Үгүй",
+                          backgroundColor: GeneralColors.grayColor,
+                          onPressed: onDismiss,
+                          radius: 8,
+                        ),
+                      ),
+                      HSpacer(),
+                      Expanded(
+                        child: PrimaryButton(
+                          title: "Тийм",
+                          radius: 8,
+                          onPressed: onSuccess,
+                        ),
+                      )
+                    ],
                   ),
-                  HSpacer(),
-                  Expanded(
-                    child: PrimaryButton(
-                      title: "Тийм",
-                      radius: 8,
-                      onPressed: onSuccess,
-                    ),
-                  )
                 ],
-              ),
+              )
             ],
-          )
-        ],
       );
     },
   );

@@ -26,7 +26,7 @@ class PodcastItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget actionBtn() {
+    Widget actionBtn({Color? color}) {
       if (podcast?.isPaid == false) {
         return CustomButton(
           onTap: () {
@@ -42,7 +42,7 @@ class PodcastItem extends StatelessWidget {
           child: Image.asset(
             "assets/icons/ic_cart.png",
             width: 24,
-            color: GeneralColors.grayColor,
+            color: color,
           ),
         );
       }
@@ -52,8 +52,9 @@ class PodcastItem extends StatelessWidget {
       return SizedBox();
     }
 
-    return Consumer<PlayerProvider>(
-      builder: (context, provider, _) {
+    return Consumer2<PlayerProvider, CartProvider>(
+      builder: (context, provider, cartprovider, _) {
+        final isCarted = cartprovider.cartData?.cartItems?.where((e) => e.productId == podcast?.productId).toList();
         return CustomButton(
           onTap: () {
             Navigator.pushNamed(context, PodcastPlayer.path, arguments: {
@@ -215,7 +216,9 @@ class PodcastItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  actionBtn(),
+                  actionBtn(
+                    color: isCarted?.isNotEmpty == true ? GeneralColors.primaryColor : GeneralColors.grayColor,
+                  ),
                 ],
               ),
             ],

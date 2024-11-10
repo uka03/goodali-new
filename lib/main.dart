@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async {
+  configLoading();
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Audio playback',
@@ -55,20 +56,20 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
 
-  void configLoading() {
-    EasyLoading.instance
-      ..maskType = EasyLoadingMaskType.custom
-      ..displayDuration = const Duration(milliseconds: 1000)
-      ..loadingStyle = EasyLoadingStyle.light
-      ..indicatorSize = 60
-      ..textColor = Colors.white
-      ..backgroundColor = Colors.transparent
-      ..indicatorColor = Colors.white
-      ..maskColor = Colors.transparent
-      ..userInteractions = false
-      ..dismissOnTap = false
-      ..animationStyle = EasyLoadingAnimationStyle.custom
-      ..customAnimation = CustomAnimation();
-  }
+void configLoading() {
+  EasyLoading.instance
+    ..maskType = EasyLoadingMaskType.custom
+    ..displayDuration = const Duration(milliseconds: 1000)
+    ..loadingStyle = EasyLoadingStyle.light
+    ..indicatorSize = 60
+    ..textColor = Colors.white
+    ..backgroundColor = Colors.transparent
+    ..indicatorColor = Colors.white
+    ..maskColor = Colors.transparent
+    ..userInteractions = false
+    ..dismissOnTap = false
+    ..animationStyle = EasyLoadingAnimationStyle.custom
+    ..customAnimation = CustomAnimation();
 }

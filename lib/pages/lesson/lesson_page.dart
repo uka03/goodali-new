@@ -6,9 +6,11 @@ import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/utils/colors.dart';
+import 'package:goodali/utils/dailogs.dart';
 import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
+import 'package:goodali/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class LessonPage extends StatefulWidget {
@@ -80,7 +82,68 @@ class _LessonPageState extends State<LessonPage> {
                         item: item,
                         index: index,
                         onClick: () async {
-                          Navigator.pushNamed(context, TaskPage.path, arguments: item);
+                          if (item.locked == true) {
+                            final date = formatDate(item.openDate);
+                            showAlertDialog(
+                              context,
+                              onSuccess: () {},
+                              onDismiss: () {},
+                              title: Text(
+                                "Анхааруулга",
+                                style: GeneralTextStyle.titleText(fontSize: 24),
+                              ),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Уг хичээл түгжээтэй байна.",
+                                    style: GeneralTextStyle.titleText(),
+                                  ),
+                                  Divider(),
+                                  Text.rich(
+                                    TextSpan(
+                                      text: "Нээгдэх хугацаа: ",
+                                      children: [
+                                        TextSpan(
+                                          text: date,
+                                          style: GeneralTextStyle.titleText(),
+                                        )
+                                      ],
+                                      style: GeneralTextStyle.titleText(fontSize: 14),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              actions: [
+                                CustomButton(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          padding: EdgeInsets.symmetric(vertical: 10),
+                                          child: Center(
+                                            child: Text(
+                                              "Буцах",
+                                              style: GeneralTextStyle.titleText(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+                          } else {
+                            Navigator.pushNamed(context, TaskPage.path, arguments: item);
+                          }
                         },
                       );
                     },
