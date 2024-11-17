@@ -26,23 +26,44 @@ class PodcastItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget actionBtn({Color? color}) {
+    Widget actionBtn({required bool isCarted}) {
       if (podcast?.isPaid == false) {
         return CustomButton(
           onTap: () {
             final user = context.read<AuthProvider>().user;
             if (user != null) {
               final cart = context.read<CartProvider>();
-              cart.addCart(podcast?.productId);
-              Toast.success(context, description: "Сагсанд нэмэгдлээ.");
+              if (isCarted) {
+                cart.removeCart(podcast?.productId);
+                Toast.success(context, description: "Сагсанаас хасалаа.");
+              } else {
+                cart.addCart(podcast?.productId);
+                Toast.success(context, description: "Сагсанд нэмэгдлээ.");
+              }
             } else {
               Toast.error(context, description: "Та нэвтрэх хэрэгтэй.");
             }
           },
-          child: Image.asset(
-            "assets/icons/ic_cart.png",
-            width: 24,
-            color: color,
+          child: Container(
+            decoration: BoxDecoration(color: isCarted ? GeneralColors.primaryColor : GeneralColors.grayBGColor, borderRadius: BorderRadius.circular(20)),
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Row(
+              children: [
+                Image.asset(
+                  "assets/icons/ic_cart.png",
+                  width: 24,
+                  color: isCarted ? Colors.white : Colors.black,
+                ),
+                HSpacer.sm(),
+                Text(
+                  isCarted ? "Хасах" : "Сагслах",
+                  style: GeneralTextStyle.titleText(
+                    fontSize: 14,
+                    textColor: isCarted ? Colors.white : Colors.black,
+                  ),
+                )
+              ],
+            ),
           ),
         );
       }
@@ -84,6 +105,26 @@ class PodcastItem extends StatelessWidget {
                           podcast?.title ?? "",
                           style: GeneralTextStyle.titleText(),
                         ),
+                        if (podcast?.price != null)
+                          Column(
+                            children: [
+                              VSpacer.sm(),
+                              Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(text: "Үнэ: "),
+                                    TextSpan(
+                                      text: formatCurrency(podcast?.price ?? 0),
+                                      style: GeneralTextStyle.bodyText(
+                                        fontSize: 14,
+                                        textColor: GeneralColors.primaryColor,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         VSpacer.sm(),
                         Text(
                           removeHtmlTags(podcast?.body ?? ""),
@@ -101,123 +142,9 @@ class PodcastItem extends StatelessWidget {
               VSpacer(),
               Row(
                 children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        provider.data?.id == podcast?.id
-                            ? StreamBuilder<PlayerState>(
-                                stream: provider.audioPlayer?.playerStateStream,
-                                builder: (context, snapshot) {
-                                  final playerState = snapshot.data;
-                                  final processingState = playerState?.processingState;
-                                  final playing = playerState?.playing;
-                                  if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering) {
-                                    return Container(
-                                      decoration: BoxDecoration(color: GeneralColors.grayBGColor, borderRadius: BorderRadius.circular(30)),
-                                      padding: EdgeInsets.all(11),
-                                      child: SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          color: const Color.fromARGB(255, 160, 102, 102),
-                                          strokeWidth: 2,
-                                        ),
-                                      ),
-                                    );
-                                  } else if (playing != true) {
-                                    return audioBtn(
-                                      icon: Icons.play_arrow_rounded,
-                                      color: GeneralColors.primaryColor,
-                                      onPressed: () async {
-                                        provider.setPlayerState(CustomState.playing);
-                                      },
-                                    );
-                                  } else if (processingState != ProcessingState.completed) {
-                                    return audioBtn(
-                                      icon: Icons.pause_rounded,
-                                      color: GeneralColors.primaryColor,
-                                      onPressed: () {
-                                        provider.setPlayerState(CustomState.paused);
-                                      },
-                                    );
-                                  } else {
-                                    provider.setPlayerState(CustomState.completed);
-                                    return audioBtn(
-                                      icon: Icons.replay,
-                                      onPressed: () {
-                                        provider.setPlayerState(CustomState.playing);
-                                        provider.audioPlayer?.seek(
-                                          Duration.zero,
-                                          index: provider.audioPlayer?.effectiveIndices!.first,
-                                        );
-                                      },
-                                    );
-                                  }
-                                },
-                              )
-                            : audioBtn(
-                                icon: Icons.play_arrow_rounded,
-                                onPressed: () async {
-                                  await provider.init(podcast);
-                                  provider.setPlayerState(CustomState.playing);
-                                },
-                              ),
-                        HSpacer(),
-                        provider.data?.id == podcast?.id
-                            ? Expanded(
-                                child: StreamBuilder<SeekBarData>(
-                                  stream: provider.streamController?.stream,
-                                  builder: (context, snapshot) {
-                                    final positionData = snapshot.data;
-
-                                    return Row(
-                                      children: [
-                                        Expanded(
-                                          child: ProgressBar(
-                                            progress: positionData?.position ?? Duration.zero,
-                                            total: positionData?.duration ?? Duration.zero,
-                                            buffered: positionData?.bufferedPosition ?? Duration.zero,
-                                            thumbGlowRadius: 0.0,
-                                            thumbRadius: 0.0,
-                                            progressBarColor: GeneralColors.primaryColor,
-                                            baseBarColor: GeneralColors.grayColor,
-                                            bufferedBarColor: Colors.grey,
-                                            timeLabelLocation: TimeLabelLocation.none,
-                                            onSeek: (value) {
-                                              provider.audioPlayer?.seek(
-                                                value,
-                                                index: provider.audioPlayer?.effectiveIndices!.first,
-                                              );
-                                            },
-                                            barHeight: 4,
-                                            thumbColor: GeneralColors.primaryColor,
-                                            timeLabelType: TimeLabelType.remainingTime,
-                                            timeLabelTextStyle: GeneralTextStyle.bodyText(
-                                              fontSize: 14,
-                                              textColor: GeneralColors.grayColor,
-                                            ),
-                                          ),
-                                        ),
-                                        HSpacer(),
-                                        Text(
-                                          "${formatDuration(((positionData?.duration ?? Duration.zero) - (positionData?.position ?? Duration.zero)).inSeconds)} үлдсэн",
-                                          style: GeneralTextStyle.bodyText(
-                                            fontSize: 14,
-                                            textColor: GeneralColors.primaryColor,
-                                          ),
-                                        ),
-                                        HSpacer(),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              )
-                            : Text(formatDuration(podcast?.audioDuration)),
-                      ],
-                    ),
-                  ),
+                  Expanded(child: getCustomStatus(provider)),
                   actionBtn(
-                    color: isCarted?.isNotEmpty == true ? GeneralColors.primaryColor : GeneralColors.grayColor,
+                    isCarted: isCarted?.isNotEmpty == true,
                   ),
                 ],
               ),
@@ -238,6 +165,173 @@ class PodcastItem extends StatelessWidget {
           icon,
           size: 26,
           color: color,
+        ),
+      ),
+    );
+  }
+
+  Widget getCustomStatus(PlayerProvider provider) {
+    final isCurrentPodcast = provider.data?.id == podcast?.id;
+
+    if (podcast == null) {
+      return SizedBox();
+    }
+    return ListenableBuilder(
+        listenable: podcast!.pausedTime,
+        builder: (context, _) {
+          final hasPausedTime = podcast?.pausedTime != null && podcast?.pausedTime.value != 0;
+          return Row(
+            children: [
+              isCurrentPodcast
+                  ? playerStatus(provider)
+                  : audioBtn(
+                      icon: Icons.play_arrow_rounded,
+                      color: hasPausedTime ? GeneralColors.primaryColor : Colors.black,
+                      onPressed: () async {
+                        await provider.init(podcast);
+                        provider.setPlayerState(CustomState.playing);
+                      },
+                    ),
+              HSpacer(),
+              Expanded(
+                child: isCurrentPodcast
+                    ? buildSeekBar(provider)
+                    : hasPausedTime
+                        ? buildProgressBar(
+                            progress: Duration(seconds: podcast?.pausedTime.value ?? 0),
+                            total: Duration(seconds: podcast?.audioDuration ?? 0),
+                            remainingTime: (podcast?.audioDuration ?? 0) - (podcast?.pausedTime.value ?? 0),
+                            isPaused: true,
+                          )
+                        : Text(
+                            formatDuration(podcast?.audioDuration ?? 0),
+                            style: GeneralTextStyle.bodyText(
+                              fontSize: 14,
+                            ),
+                          ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget buildSeekBar(PlayerProvider provider) {
+    return StreamBuilder<SeekBarData>(
+      stream: provider.streamController?.stream,
+      builder: (context, snapshot) {
+        final positionData = snapshot.data;
+
+        return buildProgressBar(
+          progress: positionData?.position ?? Duration.zero,
+          total: positionData?.duration ?? Duration.zero,
+          buffered: positionData?.bufferedPosition,
+          remainingTime: ((positionData?.duration ?? Duration.zero) - (positionData?.position ?? Duration.zero)).inSeconds,
+          onSeek: (value) {
+            provider.audioPlayer?.seek(value, index: provider.audioPlayer?.effectiveIndices!.first);
+          },
+        );
+      },
+    );
+  }
+
+  Widget buildProgressBar({
+    required Duration progress,
+    required Duration total,
+    bool isPaused = false,
+    Duration? buffered,
+    int? remainingTime,
+    void Function(Duration)? onSeek,
+  }) {
+    return Row(
+      children: [
+        if (!isPaused)
+          Expanded(
+            child: ProgressBar(
+              progress: progress,
+              total: total,
+              buffered: buffered,
+              thumbGlowRadius: 0.0,
+              thumbRadius: 0.0,
+              progressBarColor: GeneralColors.primaryColor,
+              baseBarColor: GeneralColors.grayColor,
+              bufferedBarColor: Colors.grey,
+              timeLabelLocation: TimeLabelLocation.none,
+              barHeight: 4,
+              thumbColor: GeneralColors.primaryColor,
+              onSeek: onSeek,
+              timeLabelType: TimeLabelType.remainingTime,
+              timeLabelTextStyle: GeneralTextStyle.bodyText(
+                fontSize: 14,
+                textColor: GeneralColors.grayColor,
+              ),
+            ),
+          ),
+        if (!isPaused) HSpacer(),
+        if (remainingTime != null)
+          Text(
+            "${formatDuration(remainingTime)} үлдсэн",
+            style: GeneralTextStyle.bodyText(
+              fontSize: 14,
+              textColor: GeneralColors.primaryColor,
+            ),
+          ),
+      ],
+    );
+  }
+
+  StreamBuilder<PlayerState> playerStatus(PlayerProvider provider) {
+    return StreamBuilder<PlayerState>(
+      stream: provider.audioPlayer?.playerStateStream,
+      builder: (context, snapshot) {
+        final playerState = snapshot.data;
+        final processingState = playerState?.processingState;
+        final playing = playerState?.playing;
+
+        if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering) {
+          return loadingIndicator();
+        } else if (playing != true) {
+          return audioBtn(
+            icon: Icons.play_arrow_rounded,
+            color: GeneralColors.primaryColor,
+            onPressed: () async {
+              provider.setPlayerState(CustomState.playing);
+            },
+          );
+        } else if (processingState != ProcessingState.completed) {
+          return audioBtn(
+            icon: Icons.pause_rounded,
+            color: GeneralColors.primaryColor,
+            onPressed: () {
+              provider.setPlayerState(CustomState.paused);
+            },
+          );
+        } else {
+          provider.setPlayerState(CustomState.completed);
+          return audioBtn(
+            icon: Icons.replay,
+            onPressed: () {
+              provider.setPlayerState(CustomState.playing);
+              provider.audioPlayer?.seek(
+                Duration.zero,
+                index: provider.audioPlayer?.effectiveIndices!.first,
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget loadingIndicator() {
+    return Container(
+      decoration: BoxDecoration(color: GeneralColors.grayBGColor, borderRadius: BorderRadius.circular(30)),
+      padding: const EdgeInsets.all(11),
+      child: const SizedBox(
+        height: 20,
+        width: 20,
+        child: CircularProgressIndicator(
+          color: Color.fromARGB(255, 160, 102, 102),
+          strokeWidth: 2,
         ),
       ),
     );

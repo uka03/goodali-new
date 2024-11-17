@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/pages/auth/change_password.dart';
 import 'package:goodali/pages/auth/provider/auth_provider.dart';
+import 'package:goodali/pages/home/provider/home_provider.dart';
 import 'package:goodali/pages/menu/faq_page.dart';
 import 'package:goodali/pages/menu/term_page.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
@@ -69,6 +70,8 @@ class _MenuPageState extends State<MenuPage> {
             title: 'Гарах',
             isLogout: true,
             onPressed: () {
+              final home = context.read<HomeProvider>();
+              home.getHomeData(refresh: true);
               _authProvider.logout();
               Navigator.pop(context);
             },

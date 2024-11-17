@@ -29,6 +29,7 @@ class CartProvider extends ChangeNotifier {
   Future<BaseResponse> removeCart(int? id) async {
     final response = await _dioClient.deleteFromCart(id);
     getItems();
+    notifyListeners();
     return response;
   }
 

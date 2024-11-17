@@ -41,7 +41,8 @@ FeedResponseData _$FeedResponseDataFromJson(Map<String, dynamic> json) =>
       avatar: json['avatar'] as String?,
       isLike: _valueNotifierNullableFromJson(json['isLike'] as bool?),
       userId: (json['user_id'] as num?)?.toInt(),
-    );
+    )..replyCount = _valueNotifierIntNullableFromJson(
+        (json['replyCount'] as num?)?.toInt());
 
 Map<String, dynamic> _$FeedResponseDataToJson(FeedResponseData instance) =>
     <String, dynamic>{
@@ -57,6 +58,7 @@ Map<String, dynamic> _$FeedResponseDataToJson(FeedResponseData instance) =>
       'user_id': instance.userId,
       'avatar': instance.avatar,
       'isLike': _valueNotifierNullableToJson(instance.isLike),
+      'replyCount': _valueNotifierIntNullableToJson(instance.replyCount),
     };
 
 ReplyResponse _$ReplyResponseFromJson(Map<String, dynamic> json) =>

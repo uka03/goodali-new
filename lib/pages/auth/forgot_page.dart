@@ -12,6 +12,7 @@ import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/utils/toasts.dart';
+import 'package:goodali/utils/types.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPage extends StatefulWidget {
@@ -93,8 +94,11 @@ class _ForgotPageState extends State<ForgotPage> {
                       if (_formKey.currentState?.validate() == true) {
                         FocusScope.of(context).unfocus();
                         showLoader();
-                        final response = await _authProvider.sendOTP(
-                          _controller.text,
+                        final response = await _authProvider.forgetPassword(
+                          AuthInfo(
+                            email: _controller.text,
+                            authType: AuthType.forgot,
+                          ),
                         );
                         if (response.success == true) {
                           if (context.mounted) {

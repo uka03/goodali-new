@@ -37,7 +37,7 @@ class DioClient {
   final registerUrl = "/register";
   final checkUrl = "/check";
   final forgotUrl = "/forget-password";
-  final verifyUrl = "/verify";
+  final verifyUrl = "/verify-otp";
   final sendOTPUrl = "/sent-otp";
   final bannerUrl = "/banners";
   final albumUrl = "/album";
@@ -406,6 +406,24 @@ class DioClient {
     }
   }
 
+  Future<BaseResponse> podcastPausedTime(int? id, int pausedTime) async {
+    try {
+      final response = await _dioClient.post(
+        "$baseUrl$podcastUrl/$id/pause",
+        data: {
+          "audioType": "podcast",
+          "pausedTime": pausedTime
+        },
+      );
+      final model = BaseResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = BaseResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
   Future<VideoResponse> getVideos({String? page, String? limit}) async {
     try {
       final response = await _dioClient.get("$baseUrl$videoUrl?page=$page&limit=$limit");
@@ -430,9 +448,13 @@ class DioClient {
     }
   }
 
-  Future<PostResponse> getPost({String? page, String? limit}) async {
+  Future<PostResponse> getPost({String? page, String? limit, String? tagIds}) async {
     try {
-      final response = await _dioClient.get("$baseUrl$postUrl?page=$page&limit=$limit");
+      String url = "$baseUrl$postUrl?page=$page&limit=$limit";
+      if (tagIds != null) {
+        url = "$baseUrl$postUrl?page=$page&limit=$limit&tagIds=$tagIds";
+      }
+      final response = await _dioClient.get(url);
       final model = PostResponse.fromJson(response.data);
       return model;
     } catch (e) {

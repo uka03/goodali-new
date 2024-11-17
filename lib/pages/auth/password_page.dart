@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/auth/forgot_page.dart';
 import 'package:goodali/pages/auth/provider/auth_provider.dart';
+import 'package:goodali/pages/home/provider/home_provider.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/shared/general_scaffold.dart';
@@ -57,6 +58,8 @@ class _PasswordPageState extends State<PasswordPage> {
           final response = await _authProvider.login(info);
           if (response.data?.token?.isNotEmpty == true) {
             if (mounted) {
+              final home = context.read<HomeProvider>();
+              home.getHomeData(refresh: true);
               Navigator.popUntil(context, (route) => route.isFirst);
             }
           } else if (mounted) {

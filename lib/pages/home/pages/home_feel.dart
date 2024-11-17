@@ -44,7 +44,7 @@ class HomeFeel extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16),
             itemCount: homeData.moods.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 0.8,
+              childAspectRatio: 0.7,
               crossAxisCount: 3,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
@@ -75,6 +75,8 @@ class HomeFeel extends StatelessWidget {
                     Text(
                       mood.title ?? "",
                       textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,

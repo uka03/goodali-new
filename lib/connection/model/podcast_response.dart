@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/base_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'podcast_response.g.dart';
@@ -41,6 +42,8 @@ class PodcastResponseData {
   @JsonKey(name: "is_special")
   final bool? isSpecial;
   final bool? isPaid;
+  @JsonKey(fromJson: _valueNotifierNullableFromJson, toJson: _valueNotifierNullableToJson, name: "paused_time")
+  late ValueNotifier<int?> pausedTime;
 
   PodcastResponseData({
     required this.audio,
@@ -59,8 +62,28 @@ class PodcastResponseData {
     required this.statis,
     required this.albumId,
     required this.price,
+    required this.pausedTime,
   });
 
   factory PodcastResponseData.fromJson(Map<String, dynamic> json) => _$PodcastResponseDataFromJson(json);
   Map<String, dynamic> toJson() => _$PodcastResponseDataToJson(this);
 }
+
+class ValueNotifierBoolNullableConverter implements JsonConverter<ValueNotifier<int?>, int?> {
+  const ValueNotifierBoolNullableConverter();
+
+  @override
+  ValueNotifier<int?> fromJson(int? json) {
+    return ValueNotifier<int?>(json);
+  }
+
+  @override
+  int? toJson(ValueNotifier<int?> object) {
+    return object.value;
+  }
+}
+
+// Хөрвүүлэхэд ашиглах функцүүд
+ValueNotifier<int?> _valueNotifierNullableFromJson(int? json) => ValueNotifier<int?>(json);
+
+int? _valueNotifierNullableToJson(ValueNotifier<int?> notifier) => notifier.value;

@@ -48,18 +48,18 @@ class PlayerProvider extends ChangeNotifier {
 
         if (audioPlayer != null && data?.audio != "Audio failed to upload" && data?.audio != null) {
           await audioPlayer?.setAudioSource(
-            AudioSource.uri(
-              Uri.parse(
-                data?.audio.toUrl() ?? "",
+              AudioSource.uri(
+                Uri.parse(
+                  data?.audio.toUrl() ?? "",
+                ),
+                tag: MediaItem(
+                  id: data?.audio ?? "",
+                  title: data?.title ?? "",
+                  artist: "Goodali",
+                  artUri: Uri.parse(data?.banner.toUrl() ?? placeholder),
+                ),
               ),
-              tag: MediaItem(
-                id: data?.audio ?? "",
-                title: data?.title ?? "",
-                artist: "Goodali",
-                artUri: Uri.parse(data?.banner.toUrl() ?? placeholder),
-              ),
-            ),
-          );
+              initialPosition: Duration(seconds: item.pausedTime.value ?? 0));
         }
       } catch (e) {
         print("Error setting audio source: $e");
@@ -84,6 +84,11 @@ class PlayerProvider extends ChangeNotifier {
           audioPlayer?.stop();
           break;
         case CustomState.disposed:
+          if (data != null) {
+            await _dioClient.podcastPausedTime(data?.id, audioPlayer?.position.inSeconds ?? 0);
+          }
+          data?.pausedTime.value = audioPlayer?.position.inSeconds;
+
           await audioPlayer?.stop();
           // await audioPlayer?.dispose();
           await sub?.cancel();

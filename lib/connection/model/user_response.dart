@@ -26,6 +26,7 @@ class UserResponseData {
   final String? avatar;
   @JsonKey(name: "created_at")
   final String? createdAt;
+  final bool? hasTraining;
 
   UserResponseData({
     required this.avatar,
@@ -33,6 +34,7 @@ class UserResponseData {
     required this.email,
     required this.id,
     required this.nickname,
+    required this.hasTraining,
   });
 
   factory UserResponseData.fromJson(Map<String, dynamic> json) => _$UserResponseDataFromJson(json);

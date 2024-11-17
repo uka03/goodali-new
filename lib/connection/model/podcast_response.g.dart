@@ -42,6 +42,8 @@ PodcastResponseData _$PodcastResponseDataFromJson(Map<String, dynamic> json) =>
       statis: (json['statis'] as num?)?.toInt(),
       albumId: (json['album_id'] as num?)?.toInt(),
       price: (json['price'] as num?)?.toInt(),
+      pausedTime: _valueNotifierNullableFromJson(
+          (json['paused_time'] as num?)?.toInt()),
     );
 
 Map<String, dynamic> _$PodcastResponseDataToJson(
@@ -63,4 +65,5 @@ Map<String, dynamic> _$PodcastResponseDataToJson(
       'product_id': instance.productId,
       'is_special': instance.isSpecial,
       'isPaid': instance.isPaid,
+      'paused_time': _valueNotifierNullableToJson(instance.pausedTime),
     };

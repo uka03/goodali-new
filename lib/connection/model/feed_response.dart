@@ -39,6 +39,8 @@ class FeedResponseData {
   final String? avatar;
   @JsonKey(fromJson: _valueNotifierNullableFromJson, toJson: _valueNotifierNullableToJson)
   late ValueNotifier<bool?> isLike;
+  @JsonKey(fromJson: _valueNotifierIntNullableFromJson, toJson: _valueNotifierIntNullableToJson)
+  late ValueNotifier<int?> replyCount;
 
   FeedResponseData({
     required this.id,
@@ -55,6 +57,7 @@ class FeedResponseData {
     required this.userId,
   }) {
     isLike = ValueNotifier(selfLike ?? false);
+    replyCount = ValueNotifier(replys?.length ?? 0);
   }
 
   factory FeedResponseData.fromJson(Map<String, dynamic> json) => _$FeedResponseDataFromJson(json);
@@ -120,3 +123,22 @@ class ValueNotifierBoolNullableConverter implements JsonConverter<ValueNotifier<
 ValueNotifier<bool?> _valueNotifierNullableFromJson(bool? json) => ValueNotifier<bool?>(json);
 
 bool? _valueNotifierNullableToJson(ValueNotifier<bool?> notifier) => notifier.value;
+
+class ValueNotifierIntNullableConverter implements JsonConverter<ValueNotifier<int?>, int?> {
+  const ValueNotifierIntNullableConverter();
+
+  @override
+  ValueNotifier<int?> fromJson(int? json) {
+    return ValueNotifier<int?>(json);
+  }
+
+  @override
+  int? toJson(ValueNotifier<int?> object) {
+    return object.value;
+  }
+}
+
+// Хөрвүүлэхэд ашиглах функцүүд
+ValueNotifier<int?> _valueNotifierIntNullableFromJson(int? json) => ValueNotifier<int?>(json);
+
+int? _valueNotifierIntNullableToJson(ValueNotifier<int?> notifier) => notifier.value;

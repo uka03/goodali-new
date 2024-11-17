@@ -30,6 +30,7 @@ UserResponseData _$UserResponseDataFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String?,
       id: (json['id'] as num?)?.toInt(),
       nickname: json['nickname'] as String?,
+      hasTraining: json['hasTraining'] as bool?,
     );
 
 Map<String, dynamic> _$UserResponseDataToJson(UserResponseData instance) =>
@@ -39,4 +40,5 @@ Map<String, dynamic> _$UserResponseDataToJson(UserResponseData instance) =>
       'nickname': instance.nickname,
       'avatar': instance.avatar,
       'created_at': instance.createdAt,
+      'hasTraining': instance.hasTraining,
     };

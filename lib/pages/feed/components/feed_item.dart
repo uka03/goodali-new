@@ -176,12 +176,16 @@ class PostItem extends StatelessWidget {
                       );
                     }),
                 HSpacer(),
-                actionBtn(
-                  context,
-                  count: item.replys?.length,
-                  iconPath: "assets/icons/ic_chat.png",
-                  onPressed: () {},
-                ),
+                ValueListenableBuilder<int?>(
+                    valueListenable: item.replyCount,
+                    builder: (context, value, _) {
+                      return actionBtn(
+                        context,
+                        count: item.replys?.length,
+                        iconPath: "assets/icons/ic_chat.png",
+                        onPressed: () {},
+                      );
+                    }),
               ],
             )
           ],

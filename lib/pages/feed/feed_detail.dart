@@ -358,51 +358,65 @@ class _FeedDetailState extends State<FeedDetail> {
 
   showReplyModal() {
     final commtentController = TextEditingController();
+    final formkey = GlobalKey<FormState>();
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (_) {
-        return Container(
-          constraints: BoxConstraints(maxHeight: 300),
-          margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        return Form(
+          key: formkey,
           child: Container(
-            decoration: BoxDecoration(color: GeneralColors.primaryBGColor),
-            // height: 80,
-            padding: EdgeInsets.all(16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    autofocus: true,
-                    onSubmitted: (value) {
-                      postReply(commtentController.text);
-                    },
-                    controller: commtentController,
-                    cursorColor: GeneralColors.primaryColor,
-                    maxLines: null,
-                    textInputAction: TextInputAction.send,
-                    onChanged: (value) {},
-                    expands: false,
-                    decoration: const InputDecoration(
-                      filled: false,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      border: InputBorder.none,
-                      hintText: 'Сэтгэгдэл бичих...',
-                      hintStyle: TextStyle(color: GeneralColors.grayColor),
+            constraints: BoxConstraints(maxHeight: 300),
+            margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              decoration: BoxDecoration(color: GeneralColors.primaryBGColor),
+              // height: 80,
+              padding: EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextFormField(
+                      autofocus: true,
+                      validator: (value) {
+                        if ((value?.length ?? 0) < 5) {
+                          return "Сэтгэгдэл хэсэг доод тал нь 5н тэмдэгт байх хэрэгтэй";
+                        }
+                        return null;
+                      },
+                      onFieldSubmitted: (_) {
+                        if (formkey.currentState?.validate() == true) {
+                          postReply(commtentController.text);
+                        }
+                      },
+                      controller: commtentController,
+                      cursorColor: GeneralColors.primaryColor,
+                      maxLines: null,
+                      textInputAction: TextInputAction.send,
+                      onChanged: (value) {},
+                      expands: false,
+                      decoration: const InputDecoration(
+                        filled: false,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        border: InputBorder.none,
+                        hintText: 'Сэтгэгдэл бичих...',
+                        hintStyle: TextStyle(color: GeneralColors.grayColor),
+                      ),
                     ),
                   ),
-                ),
-                CustomButton(
-                  child: const Icon(Icons.send, color: GeneralColors.primaryColor),
-                  onTap: () {
-                    postReply(commtentController.text);
-                  },
-                )
-              ],
+                  CustomButton(
+                    child: const Icon(Icons.send, color: GeneralColors.primaryColor),
+                    onTap: () {
+                      if (formkey.currentState?.validate() == true) {
+                        postReply(commtentController.text);
+                      }
+                    },
+                  )
+                ],
+              ),
             ),
           ),
         );
@@ -427,6 +441,7 @@ class _FeedDetailState extends State<FeedDetail> {
             createdAt: response.createdAt,
           ),
         );
+        widget.item.replyCount.value = (widget.item.replyCount.value ?? 0) + 1;
       });
 
       Toast.success(context, description: "Амжилтай");

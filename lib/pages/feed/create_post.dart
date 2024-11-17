@@ -166,8 +166,8 @@ class _CreatePostState extends State<CreatePost> {
 
   onWherePostModal({required List<TagResponseData?> selectedTags}) async {
     TypeItem? selectedItem;
-    await _authProvider.getMe();
-    final hasTraining = false;
+    final user = await _authProvider.getMe();
+    final hasTraining = user?.hasTraining ?? false;
     if (!mounted) return;
     showModalSheet(
       context,
@@ -269,15 +269,23 @@ class _CreatePostState extends State<CreatePost> {
       appBar: CustomAppBar(
         title: const Text("Пост нэмэх"),
       ),
-      bottomBar: Container(
-        padding: EdgeInsets.fromLTRB(16, 8, 16, 32),
-        color: Colors.transparent,
-        child: PrimaryButton(
-          onPressed: () {
-            onTagModal(tag: _feedProvider.tags);
-          },
-          title: data != null ? "Засах" : "Нийтлэх",
-        ),
+      bottomBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "Та өдөрт 2 удаа пост оруулах эрхтэй юм шүү.",
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(16, 8, 16, 32),
+            color: Colors.transparent,
+            child: PrimaryButton(
+              onPressed: () {
+                onTagModal(tag: _feedProvider.tags);
+              },
+              title: data != null ? "Засах" : "Нийтлэх",
+            ),
+          ),
+        ],
       ),
       child: SingleChildScrollView(
         child: Form(
@@ -298,6 +306,9 @@ class _CreatePostState extends State<CreatePost> {
                   if (value?.isEmpty ?? false) {
                     return "Гарчигийг оруулна уу";
                   }
+                  if ((value?.length ?? 0) < 2) {
+                    return "Гарчиг доод тал нь 2 тэмдэгт байх хэрэгтэй";
+                  }
                   return null;
                 },
               ),
@@ -310,6 +321,9 @@ class _CreatePostState extends State<CreatePost> {
                   validator: (value) {
                     if (value?.isEmpty ?? false) {
                       return "Үндсэн хэсэгийг оруулна уу";
+                    }
+                    if ((value?.length ?? 0) < 2) {
+                      return "Үндсэн хэсэг доод тал нь 5н тэмдэгт байх хэрэгтэй";
                     }
                     return null;
                   }),
