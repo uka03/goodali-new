@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/extensions/string_extensions.dart';
-import 'package:goodali/pages/home/components/home_title.dart';
 import 'package:goodali/pages/home/provider/home_provider.dart';
 import 'package:goodali/pages/training/training_page.dart';
 import 'package:goodali/shared/components/cached_image.dart';
@@ -24,11 +23,6 @@ class HomeTraining extends StatelessWidget {
         final item = homeData[index];
         return Column(
           children: [
-            if (item.title?.isNotEmpty == true)
-              HomeTitle(
-                title: item.title ?? "",
-              ),
-            VSpacer(),
             if (item.item.training != null)
               CustomButton(
                 onTap: () {
@@ -44,7 +38,7 @@ class HomeTraining extends StatelessWidget {
                       aspectRatio: 16 / 9,
                       child: CachedImage(
                         imageUrl: item.item.training?.banner.toUrl() ?? placeholder,
-                        borderRadius: 8,
+                        borderRadius: 20,
                       ),
                     )
                   ],

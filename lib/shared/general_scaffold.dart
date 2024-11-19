@@ -145,8 +145,8 @@ class GeneralScaffold extends StatelessWidget {
                             thumbGlowRadius: 0.0,
                             thumbRadius: 0.0,
                             progressBarColor: GeneralColors.primaryColor,
-                            baseBarColor: GeneralColors.grayColor,
-                            bufferedBarColor: Colors.grey,
+                            baseBarColor: Color(0xFFF3F0EE),
+                            bufferedBarColor: Color.fromARGB(255, 209, 209, 209),
                             timeLabelLocation: TimeLabelLocation.none,
                             onSeek: (value) {
                               provider.audioPlayer?.seek(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/search_response.dart';
 import 'package:goodali/pages/album/album_detail.dart';
 import 'package:goodali/pages/article/article_detail.dart';
+import 'package:goodali/pages/book/book_page.dart';
 import 'package:goodali/pages/mood/mood_detail.dart';
 import 'package:goodali/pages/podcast/podcast_player.dart';
 import 'package:goodali/pages/search/provider/search_provider.dart';
@@ -187,6 +188,13 @@ class _SearchPageState extends State<SearchPage> {
                                       Navigator.pushNamed(
                                         context,
                                         ArticleDetail.path,
+                                        arguments: item.id,
+                                      );
+                                      break;
+                                    case "book":
+                                      Navigator.pushNamed(
+                                        context,
+                                        BookPage.path,
                                         arguments: item.id,
                                       );
                                       break;

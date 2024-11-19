@@ -27,19 +27,17 @@ class TrainingProvider extends ChangeNotifier {
   }
 
   Future<void> getTraingingItem(PurchaseTrainingData? data) async {
-    items.clear();
     final response = await _dioClient.getTrainingItem(data?.id);
 
-    items.addAll(response.data ?? []);
+    items = (response.data ?? []);
     trainingData = data;
     notifyListeners();
   }
 
   Future<void> getTraingingLesson(LessonResponseData? data) async {
-    lessons.clear();
     final response = await _dioClient.getTrainingLesson(data?.id);
 
-    lessons.addAll(response.data ?? []);
+    lessons = (response.data ?? []);
     item = data;
     notifyListeners();
   }
@@ -55,20 +53,5 @@ class TrainingProvider extends ChangeNotifier {
 
   Future<BaseResponse> setAnswer(int? id, String? text) async {
     return await _dioClient.setAnswer(id, text);
-  }
-
-  void clearItems() {
-    items.clear(); // Clear the items list
-    notifyListeners(); // Notify listeners to update the UI
-  }
-
-  void clearTasks() {
-    tasks.clear(); // Clear the items list
-    notifyListeners(); // Notify listeners to update the UI
-  }
-
-  void clearlessons() {
-    lessons.clear(); // Clear the items list
-    notifyListeners(); // Notify listeners to update the UI
   }
 }

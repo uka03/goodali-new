@@ -6,7 +6,6 @@ import 'package:goodali/pages/podcast/components/podcast_item.dart';
 import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/utils/spacer.dart';
-import 'package:goodali/utils/text_styles.dart';
 
 class HomeFeel extends StatelessWidget {
   const HomeFeel({
@@ -21,15 +20,6 @@ class HomeFeel extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Center(
-            child: Text(
-              "Мүүд",
-              style: GeneralTextStyle.titleText(
-                fontSize: 32,
-              ),
-            ),
-          ),
-          VSpacer(),
           if (homeData.moodMain.isNotEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

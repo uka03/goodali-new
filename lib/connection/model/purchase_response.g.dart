@@ -33,6 +33,9 @@ PurchaseResponseData _$PurchaseResponseDataFromJson(
       training: (json['training'] as List<dynamic>?)
           ?.map((e) => PurchaseTrainingData.fromJson(e as Map<String, dynamic>))
           .toList(),
+      book: (json['book'] as List<dynamic>?)
+          ?.map((e) => PodcastResponseData.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$PurchaseResponseDataToJson(
@@ -40,6 +43,7 @@ Map<String, dynamic> _$PurchaseResponseDataToJson(
     <String, dynamic>{
       'albums': instance.albums,
       'training': instance.training,
+      'book': instance.book,
     };
 
 PurchaseTrainingData _$PurchaseTrainingDataFromJson(

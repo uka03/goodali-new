@@ -269,28 +269,34 @@ class _CreatePostState extends State<CreatePost> {
       appBar: CustomAppBar(
         title: const Text("Пост нэмэх"),
       ),
-      bottomBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            "Та өдөрт 2 удаа пост оруулах эрхтэй юм шүү.",
+      bottomBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Та өдөрт 2 удаа пост оруулах эрхтэй юм шүү.",
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(16, 8, 16, 32),
+                color: Colors.transparent,
+                child: PrimaryButton(
+                  onPressed: () {
+                    onTagModal(tag: _feedProvider.tags);
+                  },
+                  title: data != null ? "Засах" : "Нийтлэх",
+                ),
+              ),
+            ],
           ),
-          Container(
-            padding: EdgeInsets.fromLTRB(16, 8, 16, 32),
-            color: Colors.transparent,
-            child: PrimaryButton(
-              onPressed: () {
-                onTagModal(tag: _feedProvider.tags);
-              },
-              title: data != null ? "Засах" : "Нийтлэх",
-            ),
-          ),
-        ],
+        ),
       ),
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 "Та юу бодож байна?",

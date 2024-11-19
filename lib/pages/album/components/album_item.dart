@@ -4,6 +4,7 @@ import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/album/album_detail.dart';
 import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_button.dart';
+import 'package:goodali/utils/colors.dart';
 import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
@@ -46,7 +47,9 @@ class AlbumItem extends StatelessWidget {
             VSpacer(size: 12),
             Text(
               "${album?.totalLectures} aудио",
-              style: GeneralTextStyle.bodyText(),
+              style: GeneralTextStyle.bodyText(
+                textColor: GeneralColors.textGrayColor,
+              ),
             )
           ],
         ),

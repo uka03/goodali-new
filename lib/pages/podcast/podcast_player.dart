@@ -163,8 +163,8 @@ class CustomProgressBar extends StatelessWidget {
       thumbGlowRadius: isMiniPlayer ? 0.0 : 30.0,
       thumbRadius: isMiniPlayer ? 0.0 : 10,
       progressBarColor: progressBarColor ?? GeneralColors.primaryColor,
-      baseBarColor: baseBarColor ?? GeneralColors.grayColor,
-      bufferedBarColor: bufferedBarColor ?? Colors.grey,
+      baseBarColor: baseBarColor ?? Color(0xFFF3F0EE),
+      bufferedBarColor: bufferedBarColor ?? Color.fromARGB(255, 209, 209, 209),
       timeLabelLocation: isMiniPlayer ? TimeLabelLocation.none : null,
       onSeek: (value) {
         if (onSeek != null) {

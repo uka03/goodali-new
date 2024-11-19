@@ -14,7 +14,7 @@ const String hostUrl = "https://app.goodali.mn/api/v1";
 final List<TypeItem> homeTypes = [
   TypeItem("Сонсох", 0),
   TypeItem("Унших", 1),
-  TypeItem("Мэдрэх", 2),
+  TypeItem("Мүүд", 2),
   TypeItem("Сургалт", 3),
 ];
 final List<TypeItem> fireTypes = [

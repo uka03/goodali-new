@@ -7,6 +7,7 @@ import 'package:goodali/pages/auth/provider/auth_provider.dart';
 import 'package:goodali/pages/lesson/item_page.dart';
 import 'package:goodali/pages/menu/menu_page.dart';
 import 'package:goodali/pages/podcast/components/podcast_item.dart';
+import 'package:goodali/pages/podcast/podcast_player.dart';
 import 'package:goodali/pages/profile/profile_edit.dart';
 import 'package:goodali/pages/profile/provider/profile_provider.dart';
 import 'package:goodali/shared/components/action_item.dart';
@@ -111,6 +112,47 @@ class _ProfilePageState extends State<ProfilePage> {
                                           if (data.items.podcast != null)
                                             PodcastItem(
                                               podcast: data.items.podcast,
+                                            ),
+                                          if (data.items.book != null)
+                                            CustomButton(
+                                              onTap: () {
+                                                Navigator.pushNamed(
+                                                  context,
+                                                  PodcastPlayer.path,
+                                                  arguments: {
+                                                    "id": data.items.book?.id,
+                                                    "data": data.items.book,
+                                                  },
+                                                );
+                                              },
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  CachedImage(
+                                                    imageUrl: data.items.book?.banner.toUrl() ?? placeholder,
+                                                    width: 80,
+                                                    height: 100,
+                                                    borderRadius: 10,
+                                                  ),
+                                                  HSpacer(),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          data.items.book?.title ?? "",
+                                                          style: GeneralTextStyle.titleText(),
+                                                        ),
+                                                        VSpacer.sm(),
+                                                        Text(
+                                                          removeHtmlTags(data.items.book?.body ?? ""),
+                                                          maxLines: 3,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           if (data.items.training != null)
                                             PurchasedTraining(

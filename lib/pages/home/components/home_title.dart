@@ -30,12 +30,15 @@ class HomeTitle extends StatelessWidget {
             },
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-              decoration: BoxDecoration(color: GeneralColors.grayBGColor, borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(
+                color: GeneralColors.grayBGColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: Row(
                 children: [
                   Text(
                     "Бүгд",
-                    style: GeneralTextStyle.bodyText(fontSize: 16),
+                    style: GeneralTextStyle.titleText(fontSize: 14),
                   ),
                   HSpacer.sm(),
                   Icon(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/connection/model/feed_response.dart';
-import 'package:goodali/extensions/list_extensions.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/pages/auth/provider/auth_provider.dart';
 import 'package:goodali/pages/feed/components/tag_item.dart';
@@ -63,12 +62,12 @@ class PostItem extends StatelessWidget {
                 ),
                 HSpacer(),
                 Expanded(
-                  child: Column(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item.nickName ?? "Хэрэглэгч",
-                        style: GeneralTextStyle.bodyText(textColor: GeneralColors.textGrayColor, fontSize: 14),
+                        "${item.nickName ?? "Хэрэглэгч"} • ",
+                        style: GeneralTextStyle.bodyText(fontSize: 14),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -125,34 +124,35 @@ class PostItem extends StatelessWidget {
                   ),
               ],
             ),
-            VSpacer.xs(),
-            SizedBox(
-              height: 28,
-              child: ListView.separated(
-                reverse: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: item.tags?.limitLenght(3) ?? 0,
-                separatorBuilder: (context, index) => HSpacer(),
-                itemBuilder: (context, index) {
-                  final tag = item.tags?[index];
-                  return TagItem(tag: tag);
-                },
-              ),
-            ),
-            Text(
-              item.title ?? "",
-              style: GeneralTextStyle.titleText(),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            VSpacer(),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    item.title ?? "",
+                    style: GeneralTextStyle.titleText(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                HSpacer.sm(),
+                if (item.tags?.isNotEmpty == true)
+                  SizedBox(
+                    height: 28,
+                    child: TagItem(
+                      tag: item.tags?[0],
+                    ),
+                  ),
+              ],
             ),
             VSpacer(),
             Text(
               item.body ?? "",
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
             ),
-            VSpacer(),
+            VSpacer(size: 30),
             Row(
               children: [
                 ValueListenableBuilder<bool?>(
@@ -162,6 +162,8 @@ class PostItem extends StatelessWidget {
                         context,
                         count: item.likes,
                         iconPath: "assets/icons/ic_heart${value == true ? "_active" : ""}.png",
+                        color: value == true ? GeneralColors.primaryColor : GeneralColors.grayColor,
+                        textColor: value == true ? GeneralColors.primaryColor : null,
                         onPressed: () async {
                           if (value == true) {
                             item.likes = (item.likes ?? 1) - 1;
@@ -177,15 +179,17 @@ class PostItem extends StatelessWidget {
                     }),
                 HSpacer(),
                 ValueListenableBuilder<int?>(
-                    valueListenable: item.replyCount,
-                    builder: (context, value, _) {
-                      return actionBtn(
-                        context,
-                        count: item.replys?.length,
-                        iconPath: "assets/icons/ic_chat.png",
-                        onPressed: () {},
-                      );
-                    }),
+                  valueListenable: item.replyCount,
+                  builder: (context, value, _) {
+                    return actionBtn(
+                      context,
+                      count: item.replys?.length,
+                      iconPath: "assets/icons/ic_chat.png",
+                      onPressed: () {},
+                      color: GeneralColors.grayColor,
+                    );
+                  },
+                ),
               ],
             )
           ],
@@ -199,6 +203,8 @@ class PostItem extends StatelessWidget {
     int? count,
     required String iconPath,
     required Function() onPressed,
+    Color? color,
+    textColor,
   }) {
     return Row(
       children: [
@@ -208,7 +214,7 @@ class PostItem extends StatelessWidget {
             iconPath,
             width: 24,
             height: 24,
-            color: GeneralColors.primaryColor,
+            color: color ?? GeneralColors.primaryColor,
           ),
         ),
         HSpacer(size: 10),
@@ -216,6 +222,7 @@ class PostItem extends StatelessWidget {
           (count ?? 0).toString(),
           style: GeneralTextStyle.bodyText(
             fontSize: 14,
+            textColor: textColor,
           ),
         ),
       ],

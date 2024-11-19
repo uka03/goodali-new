@@ -121,7 +121,15 @@ class HomeProvider extends ChangeNotifier {
 
   void getHomeReadData() async {
     final posts = await getposts();
-
+    final books = await getBooks();
+    homeRead.add(
+      HomeDataType(
+        title: "Онлайн ном",
+        item: HomeFeelItems(
+          book: books,
+        ),
+      ),
+    );
     for (var i = 0; i < posts.length; i++) {
       final post = posts[i];
       if (i == 0) {
@@ -144,6 +152,7 @@ class HomeProvider extends ChangeNotifier {
         );
       }
     }
+
     notifyListeners();
   }
 
@@ -192,6 +201,11 @@ class HomeProvider extends ChangeNotifier {
     return response.data ?? [];
   }
 
+  Future<List<PodcastResponseData>> getBooks({int limit = 4, int page = 1}) async {
+    final response = await _dioClient.getBooks();
+    return response.data ?? [];
+  }
+
   Future<List<VideoResponseData>> getVideos() async {
     final response = await _dioClient.getVideos(limit: "4", page: "1");
     return response.data ?? [];
@@ -232,6 +246,7 @@ class HomeDataType {
 class HomeFeelItems {
   final List<AlbumResponseData>? albums;
   final PodcastResponseData? podcast;
+  final List<PodcastResponseData>? book;
   final VideoResponseData? video;
   final PostResponseData? post;
   final TrainingResponseData? training;
@@ -242,6 +257,7 @@ class HomeFeelItems {
     this.video,
     this.post,
     this.training,
+    this.book,
   });
 }
 

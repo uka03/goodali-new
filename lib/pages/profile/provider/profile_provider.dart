@@ -38,6 +38,31 @@ class ProfileProvider extends ChangeNotifier {
         );
       }
     }
+    for (var i = 0; i < (response.data?.book?.length ?? 0); i++) {
+      if (i == 0) {
+        dataList.add(
+          BoughtData(
+            items: BoughtItems(
+              book: response.data?.book?[i],
+              podcast: null,
+            ),
+            title: 'Онлайн ном',
+            withTitle: true,
+          ),
+        );
+      } else {
+        dataList.add(
+          BoughtData(
+            items: BoughtItems(
+              book: response.data?.book?[i],
+              podcast: null,
+            ),
+            title: 'Онлайн ном',
+            withTitle: false,
+          ),
+        );
+      }
+    }
     for (int i = 0; i < (response.data?.albums?.length ?? 0); i++) {
       for (var l = 0; l < (response.data?.albums?[i].lectures?.length ?? 0); l++) {
         if (l == 0) {
@@ -65,6 +90,7 @@ class ProfileProvider extends ChangeNotifier {
         }
       }
     }
+
     notifyListeners();
   }
 }
@@ -83,6 +109,11 @@ class BoughtData {
 class BoughtItems {
   final PurchaseTrainingData? training;
   final PodcastResponseData? podcast;
+  final PodcastResponseData? book;
 
-  BoughtItems({required this.training, required this.podcast});
+  BoughtItems({
+    this.training,
+    this.podcast,
+    this.book,
+  });
 }

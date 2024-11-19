@@ -9,6 +9,7 @@ import 'package:goodali/pages/auth/forgot_page.dart';
 import 'package:goodali/pages/auth/login_page.dart';
 import 'package:goodali/pages/auth/password_page.dart';
 import 'package:goodali/pages/auth/register_page.dart';
+import 'package:goodali/pages/book/book_page.dart';
 import 'package:goodali/pages/cart/card_page.dart';
 import 'package:goodali/pages/cart/cart_page.dart';
 import 'package:goodali/pages/cart/payment_page.dart';
@@ -65,4 +66,5 @@ final Map<String, WidgetBuilder> routes = {
   SearchPage.path: (context) => SearchPage(),
   ProfileEdit.path: (context) => ProfileEdit(),
   PodcastsPage.path: (context) => PodcastsPage(),
+  BookPage.path: (context) => BookPage(),
 };

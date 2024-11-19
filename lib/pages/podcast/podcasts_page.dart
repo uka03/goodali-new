@@ -4,6 +4,7 @@ import 'package:goodali/pages/home/provider/home_provider.dart';
 import 'package:goodali/pages/podcast/components/podcast_item.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/general_scaffold.dart';
+import 'package:goodali/utils/colors.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -64,13 +65,16 @@ class _PodcastsPageState extends State<PodcastsPage> {
           ),
           VSpacer(),
           Expanded(
-            child: PagedListView(
+            child: PagedListView.separated(
               padding: EdgeInsets.zero,
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<PodcastResponseData>(
                 itemBuilder: (BuildContext context, item, int index) {
                   return PodcastItem(podcast: item);
                 },
+              ),
+              separatorBuilder: (context, index) => Divider(
+                color: GeneralColors.borderColor,
               ),
             ),
           )

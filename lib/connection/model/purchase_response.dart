@@ -24,10 +24,12 @@ class PurchaseResponse extends BaseResponse {
 class PurchaseResponseData {
   final List<PurchaseAlbumData>? albums;
   final List<PurchaseTrainingData>? training;
+  final List<PodcastResponseData>? book;
 
   PurchaseResponseData({
     this.albums,
     this.training,
+    this.book,
   });
 
   factory PurchaseResponseData.fromJson(Map<String, dynamic> json) => _$PurchaseResponseDataFromJson(json);

@@ -123,33 +123,30 @@ class _FeedDetailState extends State<FeedDetail> {
               children: [
                 Row(
                   children: [
-                    Row(
-                      children: [
-                        CachedImage(
-                          imageUrl: item.avatar.toUrl(),
-                          width: 40,
-                          height: 40,
-                          size: "xs",
-                          borderRadius: 40,
-                        ),
-                        HSpacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item.nickName ?? "Хэрэглэгч",
-                              style: GeneralTextStyle.titleText(),
-                            ),
-                            VSpacer.xs(),
-                            Text(
-                              formatDate(item.createdAt),
-                              style: GeneralTextStyle.bodyText(
-                                textColor: GeneralColors.textGrayColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    CachedImage(
+                      imageUrl: item.avatar.toUrl(),
+                      width: 40,
+                      height: 40,
+                      size: "xs",
+                      borderRadius: 40,
+                    ),
+                    HSpacer(),
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${item.nickName ?? "Хэрэглэгч"} • ",
+                            style: GeneralTextStyle.bodyText(fontSize: 14),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            formatDate(item.createdAt),
+                            style: GeneralTextStyle.bodyText(textColor: GeneralColors.textGrayColor, fontSize: 14),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -203,6 +200,8 @@ class _FeedDetailState extends State<FeedDetail> {
                             context,
                             count: item.likes,
                             iconPath: "assets/icons/ic_heart${value == true ? "_active" : ""}.png",
+                            color: value == true ? GeneralColors.primaryColor : GeneralColors.grayColor,
+                            textColor: value == true ? GeneralColors.primaryColor : null,
                             onPressed: () async {
                               if (value == true) {
                                 item.likes = (item.likes ?? 1) - 1;
@@ -222,6 +221,7 @@ class _FeedDetailState extends State<FeedDetail> {
                       count: item.replys?.length,
                       iconPath: "assets/icons/ic_chat.png",
                       onPressed: () {},
+                      color: GeneralColors.grayColor,
                     ),
                   ],
                 ),
@@ -345,8 +345,13 @@ class _FeedDetailState extends State<FeedDetail> {
                     },
                   )
                 else
-                  EmptyState(
-                    title: "Сэтгэгдэл байхгүй байна",
+                  Column(
+                    children: const [
+                      VSpacer(size: 20),
+                      EmptyState(
+                        title: "Сэтгэгдэл байхгүй байна",
+                      ),
+                    ],
                   )
               ],
             ),
@@ -454,6 +459,8 @@ class _FeedDetailState extends State<FeedDetail> {
     int? count,
     required String iconPath,
     required Function() onPressed,
+    Color? color,
+    textColor,
   }) {
     return Row(
       children: [
@@ -463,7 +470,7 @@ class _FeedDetailState extends State<FeedDetail> {
             iconPath,
             width: 24,
             height: 24,
-            color: GeneralColors.primaryColor,
+            color: color ?? GeneralColors.primaryColor,
           ),
         ),
         HSpacer(size: 10),
@@ -471,6 +478,7 @@ class _FeedDetailState extends State<FeedDetail> {
           (count ?? 0).toString(),
           style: GeneralTextStyle.bodyText(
             fontSize: 14,
+            textColor: textColor,
           ),
         ),
       ],

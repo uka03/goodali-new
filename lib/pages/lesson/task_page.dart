@@ -27,10 +27,10 @@ class _TaskPageState extends State<TaskPage> {
     super.initState();
     _provider = Provider.of(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final item = ModalRoute.of(context)?.settings.arguments as LessonResponseData?;
-      if (item != null) {
+      final lesson = ModalRoute.of(context)?.settings.arguments as LessonResponseData?;
+      if (lesson != null) {
         showLoader();
-        await _provider.getTraingingTask(item);
+        await _provider.getTraingingTask(lesson);
         dismissLoader();
       }
     });
@@ -118,8 +118,13 @@ class TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      onTap: () {
-        Navigator.pushNamed(context, TaskDetail.path, arguments: index);
+      onTap: () async {
+        await Navigator.pushNamed(context, TaskDetail.path, arguments: index);
+        if (context.mounted) {
+          final provider = context.read<TrainingProvider>();
+
+          await provider.getTraingingTask(provider.lesson);
+        }
       },
       child: Row(
         children: [

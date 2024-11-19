@@ -78,11 +78,15 @@ class _ItemPageState extends State<ItemPage> {
                       return TrainingItemTile(
                         item: items[index],
                         onClick: () async {
-                          Navigator.pushNamed(
+                          await Navigator.pushNamed(
                             context,
                             LessonPage.path,
                             arguments: items[index],
                           );
+                          if (context.mounted) {
+                            final provider = context.read<TrainingProvider>();
+                            await provider.getTraingingItem(provider.trainingData);
+                          }
                         },
                       );
                     },

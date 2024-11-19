@@ -16,7 +16,6 @@ import 'package:goodali/shared/components/action_item.dart';
 import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
-import 'package:goodali/shared/components/custom_text_field.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/shared/provider/navigator_provider.dart';
 import 'package:goodali/utils/colors.dart';
@@ -62,6 +61,13 @@ class _HomePageState extends State<HomePage> {
               style: GeneralTextStyle.titleText(fontSize: 32),
             ),
             action: [
+              ActionItem(
+                iconPath: "assets/icons/ic_search.png",
+                onPressed: () {
+                  Navigator.pushNamed(context, SearchPage.path);
+                },
+              ),
+              HSpacer(),
               Consumer<CartProvider>(
                 builder: (context, cartProvider, _) {
                   return ActionItem(
@@ -121,21 +127,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   const SliverToBoxAdapter(child: VSpacer()),
-
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: CustomTextField(
-                        controller: _searchController,
-                        onTap: () {
-                          Navigator.pushNamed(context, SearchPage.path);
-                        },
-                        readonly: true,
-                      ),
-                    ),
-                  ),
-                  const SliverToBoxAdapter(child: VSpacer()),
-
                   // Sticky Header
                   SliverPersistentHeader(
                     pinned: true,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodali/pages/album/provider/album_provider.dart';
 import 'package:goodali/pages/article/provider/article_provider.dart';
 import 'package:goodali/pages/auth/provider/auth_provider.dart';
+import 'package:goodali/pages/book/provider/book_provider.dart';
 import 'package:goodali/pages/cart/provider/cart_provider.dart';
 import 'package:goodali/pages/feed/provider/feed_provider.dart';
 import 'package:goodali/pages/home/provider/home_provider.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => PlayerProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => SearchProvider()),
+        ChangeNotifierProvider(create: (context) => BookProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

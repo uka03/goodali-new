@@ -424,9 +424,13 @@ class DioClient {
     }
   }
 
-  Future<VideoResponse> getVideos({String? page, String? limit}) async {
+  Future<VideoResponse> getVideos({String? page, String? limit, String? tagIds}) async {
     try {
-      final response = await _dioClient.get("$baseUrl$videoUrl?page=$page&limit=$limit");
+      String url = "$baseUrl$videoUrl?page=$page&limit=$limit";
+      if (tagIds != null) {
+        url = "$baseUrl$videoUrl?page=$page&limit=$limit&tagIds=$tagIds";
+      }
+      final response = await _dioClient.get(url);
       final model = VideoResponse.fromJson(response.data);
       return model;
     } catch (e) {
@@ -787,6 +791,30 @@ class DioClient {
     } catch (e) {
       final dioFailure = e as DioException?;
       final error = SearchResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<PodcastResponse> getBooks() async {
+    try {
+      final response = await _dioClient.get("$baseUrl/book");
+      final model = PodcastResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = PodcastResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<PodcastResponseData> getBookById(int? id) async {
+    try {
+      final response = await _dioClient.get("$baseUrl/book/$id");
+      final model = PodcastResponseData.fromJson(response.data["data"]);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = PodcastResponseData.fromJson(dioFailure?.response?.data);
       return error;
     }
   }

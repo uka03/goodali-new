@@ -51,17 +51,17 @@ class _LessonPageState extends State<LessonPage> {
       appBar: const CustomAppBar(),
       child: Consumer<TrainingProvider>(
         builder: (context, provider, _) {
-          final item = provider.item;
+          final itemDetail = provider.item;
           final items = provider.lessons;
 
-          if (item == null) {
+          if (itemDetail == null) {
             return const Center(child: CircularProgressIndicator());
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                item.name ?? "",
+                itemDetail.name ?? "",
                 style: GeneralTextStyle.titleText(fontSize: 32),
                 maxLines: 2,
               ),
@@ -71,7 +71,7 @@ class _LessonPageState extends State<LessonPage> {
                   color: GeneralColors.primaryColor,
                   onRefresh: () async {
                     showLoader();
-                    await context.read<TrainingProvider>().getTraingingLesson(item);
+                    await context.read<TrainingProvider>().getTraingingLesson(itemDetail);
                     dismissLoader();
                   },
                   child: ListView.separated(
@@ -142,7 +142,10 @@ class _LessonPageState extends State<LessonPage> {
                               ],
                             );
                           } else {
-                            Navigator.pushNamed(context, TaskPage.path, arguments: item);
+                            await Navigator.pushNamed(context, TaskPage.path, arguments: item);
+                            if (context.mounted) {
+                              await context.read<TrainingProvider>().getTraingingLesson(itemDetail);
+                            }
                           }
                         },
                       );
