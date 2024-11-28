@@ -65,7 +65,7 @@ class FeedProvider extends ChangeNotifier {
 
   Future<FeedResponse> getFeedPost(int? id, {int? page, int? limit}) async {
     final tagIds = selectedTags.map((e) => e?.id).toList().join(",");
-    print(tagIds);
+
     final response = await _dioClient.getFeedPosts(
       id,
       page: page,

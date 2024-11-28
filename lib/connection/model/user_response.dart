@@ -41,3 +41,33 @@ class UserResponseData {
 
   Map<String, dynamic> toJson() => _$UserResponseDataToJson(this);
 }
+
+@JsonSerializable()
+class SettingsResponse extends BaseResponse {
+  final SettingsResponseData? data;
+
+  SettingsResponse({
+    required this.data,
+    super.error,
+    super.message,
+    super.success,
+  });
+
+  factory SettingsResponse.fromJson(Map<String, dynamic> json) => _$SettingsResponseFromJson(json);
+  @override
+  Map<String, dynamic> toJson() => _$SettingsResponseToJson(this);
+}
+
+@JsonSerializable()
+class SettingsResponseData {
+  @JsonKey(name: "app_version")
+  final String? appVersion;
+
+  SettingsResponseData({
+    required this.appVersion,
+  });
+
+  factory SettingsResponseData.fromJson(Map<String, dynamic> json) => _$SettingsResponseDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SettingsResponseDataToJson(this);
+}

@@ -36,7 +36,6 @@ class _CardPageState extends State<CardPage> {
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(NavigationDelegate(
         onPageFinished: (value) {
-          print(value);
           if (value.contains("status_code=000")) {
             cartProvider.checkPayment(order?.transactionId, 0);
             Toast.success(context, description: "Худалдан авалт амжилттай.");

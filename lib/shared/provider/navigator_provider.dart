@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class NavigatorProvider extends ChangeNotifier {
   int selectedIndex = 0;
   int homeSelectedPage = 0;
+  int podcastSelectedPage = 0;
   int fireSelectedPage = 0;
   int profileSelectedPage = 0;
 
@@ -24,6 +25,11 @@ class NavigatorProvider extends ChangeNotifier {
 
   setFire(int value) {
     fireSelectedPage = value;
+    notifyListeners();
+  }
+
+  setPodcast(int value) {
+    podcastSelectedPage = value;
     notifyListeners();
   }
 }

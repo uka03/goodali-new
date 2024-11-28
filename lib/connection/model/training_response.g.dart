@@ -81,6 +81,8 @@ TrainingInfoResponseData _$TrainingInfoResponseDataFromJson(
       order: (json['order'] as num?)?.toInt(),
       price: (json['price'] as num?)?.toInt(),
       status: (json['status'] as num?)?.toInt(),
+      expireAt: json['expire_at'] as String?,
+      opennedDate: json['openned_date'] as String?,
     );
 
 Map<String, dynamic> _$TrainingInfoResponseDataToJson(
@@ -95,6 +97,8 @@ Map<String, dynamic> _$TrainingInfoResponseDataToJson(
       'isPaid': instance.isPaid,
       'canPurchase': instance.canPurchase,
       'price': instance.price,
+      'openned_date': instance.opennedDate,
+      'expire_at': instance.expireAt,
     };
 
 PackageResponse _$PackageResponseFromJson(Map<String, dynamic> json) =>

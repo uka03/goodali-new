@@ -223,8 +223,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                     context,
                     onPressed: () async {
                       final imageFile = await _picker.pickImage(source: ImageSource.gallery);
-                      final image = await imageFile?.readAsBytes();
-                      print(image?.length);
                       if (imageFile != null) {
                         setState(() {
                           fileImage = File(imageFile.path);

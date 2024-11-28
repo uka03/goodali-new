@@ -20,9 +20,11 @@ class PodcastItem extends StatelessWidget {
   const PodcastItem({
     super.key,
     required this.podcast,
+    this.onclickAfter,
   });
 
   final PodcastResponseData? podcast;
+  final Function()? onclickAfter;
 
   @override
   Widget build(BuildContext context) {
@@ -77,11 +79,14 @@ class PodcastItem extends StatelessWidget {
       builder: (context, provider, cartprovider, _) {
         final isCarted = cartprovider.cartData?.cartItems?.where((e) => e.productId == podcast?.productId).toList();
         return CustomButton(
-          onTap: () {
-            Navigator.pushNamed(context, PodcastPlayer.path, arguments: {
+          onTap: () async {
+            await Navigator.pushNamed(context, PodcastPlayer.path, arguments: {
               "id": podcast?.id,
               "data": podcast,
             });
+            if (onclickAfter != null) {
+              onclickAfter!();
+            }
           },
           child: Column(
             children: [

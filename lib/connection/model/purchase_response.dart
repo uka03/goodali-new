@@ -63,12 +63,14 @@ class PurchasePackageData {
   final String? opennedDate;
   @JsonKey(name: "expired_date")
   final String? expiredDate;
+  final int? productId;
 
   PurchasePackageData({
     required this.id,
     required this.name,
     required this.opennedDate,
     required this.expiredDate,
+    required this.productId,
   });
   factory PurchasePackageData.fromJson(Map<String, dynamic> json) => _$PurchasePackageDataFromJson(json);
   Map<String, dynamic> toJson() => _$PurchasePackageDataToJson(this);

@@ -196,8 +196,8 @@ class HomeProvider extends ChangeNotifier {
     return response.data ?? [];
   }
 
-  Future<List<PodcastResponseData>> getPodcasts({int limit = 4, int page = 1}) async {
-    final response = await _dioClient.getPodcasts(limit: limit, page: page);
+  Future<List<PodcastResponseData>> getPodcasts({int limit = 4, int page = 1, String? type}) async {
+    final response = await _dioClient.getPodcasts(limit: limit, page: page, type: type);
     return response.data ?? [];
   }
 

@@ -71,6 +71,10 @@ class TrainingInfoResponseData {
   final bool? isPaid;
   final bool? canPurchase;
   final int? price;
+  @JsonKey(name: "openned_date")
+  final String? opennedDate;
+  @JsonKey(name: "expire_at")
+  final String? expireAt;
 
   TrainingInfoResponseData({
     required this.banner,
@@ -82,6 +86,8 @@ class TrainingInfoResponseData {
     required this.order,
     required this.price,
     required this.status,
+    required this.expireAt,
+    required this.opennedDate,
   });
   factory TrainingInfoResponseData.fromJson(Map<String, dynamic> json) => _$TrainingInfoResponseDataFromJson(json);
   Map<String, dynamic> toJson() => _$TrainingInfoResponseDataToJson(this);

@@ -31,6 +31,11 @@ class AuthProvider extends ChangeNotifier {
     return response;
   }
 
+  Future<SettingsResponse> getAppVersion() async {
+    final response = await _dio.getAppVersion();
+    return response;
+  }
+
   Future<void> logout() async {
     const storage = FlutterSecureStorage();
     await storage.delete(key: "token");

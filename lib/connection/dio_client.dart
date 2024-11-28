@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -7,6 +8,7 @@ import 'package:goodali/connection/model/base_response.dart';
 import 'package:goodali/connection/model/cart_response.dart';
 import 'package:goodali/connection/model/faq_response.dart';
 import 'package:goodali/connection/model/feed_response.dart';
+import 'package:goodali/connection/model/feedback_response.dart';
 import 'package:goodali/connection/model/lesson_response.dart';
 import 'package:goodali/connection/model/login_response.dart';
 import 'package:goodali/connection/model/mood_response.dart';
@@ -139,7 +141,6 @@ class DioClient {
         "prefix": "avatar",
       });
 
-      print(image.path);
       final response = await _dioClient.post(
         "$baseUrl/uploads/image",
         data: formData,
@@ -171,7 +172,6 @@ class DioClient {
   }
 
   Future<LoginResponse> login(AuthInfo info) async {
-    print(info.toJson());
     try {
       final response = await _dioClient.post(
         "$baseUrl$userUrl$loginUrl",
@@ -181,7 +181,6 @@ class DioClient {
       final model = LoginResponse.fromJson(response.data);
       return model;
     } catch (e) {
-      print(e);
       final dioFailure = e as DioException?;
 
       final error = LoginResponse.fromJson(dioFailure?.response?.data);
@@ -382,9 +381,67 @@ class DioClient {
     }
   }
 
-  Future<PodcastResponse> getPodcasts({int? limit, int page = 1}) async {
+  Future<FeedbackResponse> getFeedback(int? id, String type, {int? limit, int? page}) async {
     try {
-      final response = await _dioClient.get("$baseUrl$podcastUrl?limit=$limit&page=$page");
+      final response = await _dioClient.get("$baseUrl/feedback/$type?${type == "lecture" ? "albumId" : "trainingId"}=$id&limit=${limit ?? 5}&page=${page ?? 1}");
+      final model = FeedbackResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = FeedbackResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<BaseResponse> postAlbumFeedback({
+    int? lectureId,
+    int? productId,
+    int? albumId,
+    int? trainingId,
+    String? text,
+  }) async {
+    try {
+      final data = {
+        "lectureId": lectureId,
+        "productId": productId,
+        "albumId": albumId,
+        "trainingId": trainingId,
+        "text": text,
+      };
+      final response = await _dioClient.post("$baseUrl/feedback/lecture", data: data);
+      final model = BaseResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = BaseResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<BaseResponse> postTrainingFeedback({
+    int? productId,
+    int? trainingId,
+    String? text,
+  }) async {
+    try {
+      final data = {
+        "productId": productId,
+        "trainingId": trainingId,
+        "text": text,
+      };
+      final response = await _dioClient.post("$baseUrl/feedback/training", data: data);
+      final model = BaseResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = BaseResponse.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<PodcastResponse> getPodcasts({int? limit, int page = 1, String? type}) async {
+    try {
+      final response = await _dioClient.get("$baseUrl$podcastUrl?limit=$limit&page=$page&type=$type");
       final model = PodcastResponse.fromJson(response.data);
       return model;
     } catch (e) {
@@ -544,6 +601,7 @@ class DioClient {
     try {
       final response = await _dioClient.get("$baseUrl$trainingUrl/$id");
       final model = TrainingDetailResponse.fromJson(response.data);
+      log(model.data.toJson().toString());
       return model;
     } catch (e) {
       final dioFailure = e as DioException?;
@@ -655,7 +713,7 @@ class DioClient {
     try {
       final response = await _dioClient.post("$baseUrl/community/$id/like");
       final model = BaseResponse.fromJson(response.data);
-      print(response.data);
+
       return model;
     } catch (e) {
       final dioFailure = e as DioException?;
@@ -815,6 +873,18 @@ class DioClient {
     } catch (e) {
       final dioFailure = e as DioException?;
       final error = PodcastResponseData.fromJson(dioFailure?.response?.data);
+      return error;
+    }
+  }
+
+  Future<SettingsResponse> getAppVersion() async {
+    try {
+      final response = await _dioClient.get("$baseUrl/settings");
+      final model = SettingsResponse.fromJson(response.data);
+      return model;
+    } catch (e) {
+      final dioFailure = e as DioException?;
+      final error = SettingsResponse.fromJson(dioFailure?.response?.data);
       return error;
     }
   }

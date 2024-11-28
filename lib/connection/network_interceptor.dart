@@ -34,6 +34,13 @@ class NetworkInterceptor extends Interceptor {
       'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}',
     );
     debugPrint("error message:  ${err.response?.data}");
+    if (err.requestOptions.path.contains("cart")) {
+      if (err.response?.statusCode == 403) {
+        const storage = FlutterSecureStorage();
+        storage.deleteAll();
+        return handler.reject(err);
+      }
+    }
 
     if (err.response?.statusCode == 401) {
       const storage = FlutterSecureStorage();

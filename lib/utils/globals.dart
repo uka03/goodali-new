@@ -2,8 +2,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:goodali/utils/types.dart';
 
 final bottomItems = [
-  BottomItemData(iconPath: "assets/icons/ic_record.png", index: 0, title: "Сэтгэл"),
-  BottomItemData(iconPath: "assets/icons/ic_wave.png", index: 1, title: "Гал"),
+  BottomItemData(iconPath: "assets/icons/ic_heart.png", index: 0, title: "Сэтгэл"),
+  BottomItemData(iconPath: "assets/icons/ic_chat.png", index: 1, title: "Гал"),
   BottomItemData(iconPath: "assets/icons/ic_profile.png", index: 2, title: "Би")
 ];
 const String placeholder = "https://online-accounting.net/wp-content/uploads/2021/07/placeholder-image.jpg";
@@ -21,6 +21,11 @@ final List<TypeItem> fireTypes = [
   TypeItem("Хүний байгаль", 0),
   TypeItem("Нууц бүлгэм", 1),
   TypeItem("Миний нандин", 2),
+];
+final List<TypeItem> podcastType = [
+  TypeItem("Бүгд", 0),
+  TypeItem("Сонсоогүй", 1),
+  TypeItem("Сонссон", 2),
 ];
 final List<TypeItem> profileTypes = [
   TypeItem("Авсан", 0),

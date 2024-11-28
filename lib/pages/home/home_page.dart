@@ -16,6 +16,7 @@ import 'package:goodali/shared/components/action_item.dart';
 import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_app_bar.dart';
 import 'package:goodali/shared/components/custom_button.dart';
+import 'package:goodali/shared/components/custom_indicator.dart';
 import 'package:goodali/shared/general_scaffold.dart';
 import 'package:goodali/shared/provider/navigator_provider.dart';
 import 'package:goodali/utils/colors.dart';
@@ -33,8 +34,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final HomeProvider _homeProvider;
+  late final CartProvider _cartProvider;
   final TextEditingController _searchController = TextEditingController();
   final controller = ScrollController();
+
+  final ValueNotifier<int> _selectedbanner = ValueNotifier(0);
 
   List<Widget> homePage = [];
 
@@ -42,8 +46,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    _cartProvider = Provider.of<CartProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       showLoader();
+      await _cartProvider.getItems();
       await _homeProvider.getHomeData();
       dismissLoader();
     });
@@ -90,40 +96,64 @@ class _HomePageState extends State<HomePage> {
                 return [
                   if (homeProvider.banners.isNotEmpty)
                     SliverToBoxAdapter(
-                      child: CarouselSlider.builder(
-                        itemCount: homeProvider.banners.length,
-                        options: CarouselOptions(
-                          padEnds: false,
-                          autoPlay: true,
-                          disableCenter: true,
-                          viewportFraction: 1,
-                        ),
-                        itemBuilder: (context, index, realIndex) {
-                          final banner = homeProvider.banners[index];
-                          return CustomButton(
-                            onTap: () {
-                              switch (banner.productType) {
-                                case 0:
-                                  Navigator.pushNamed(context, AlbumDetail.path, arguments: banner.productId);
-                                  break;
-                                case 1:
-                                  // Navigator.pushNamed(context, AlbumDetail.path, arguments: item?.productId);
-                                  break;
-                                case 2:
-                                  Navigator.pushNamed(context, TrainingPage.path, arguments: banner.productId);
-                                  break;
-                                case 4:
-                                  Navigator.pushNamed(context, TrainingPage.path, arguments: banner.productId);
-                                  break;
-                                default:
-                              }
-                            },
-                            child: CachedImage(
-                              imageUrl: banner.banner.toUrl(),
-                              fit: BoxFit.cover,
+                      child: Stack(
+                        children: [
+                          CarouselSlider.builder(
+                            itemCount: homeProvider.banners.length,
+                            options: CarouselOptions(
+                              padEnds: false,
+                              autoPlay: true,
+                              disableCenter: true,
+                              viewportFraction: 1,
+                              onPageChanged: (index, reason) {
+                                _selectedbanner.value = index;
+                              },
                             ),
-                          );
-                        },
+                            itemBuilder: (context, index, realIndex) {
+                              final banner = homeProvider.banners[index];
+                              return CustomButton(
+                                onTap: () {
+                                  switch (banner.productType) {
+                                    case 0:
+                                      Navigator.pushNamed(context, AlbumDetail.path, arguments: banner.productId);
+                                      break;
+                                    case 1:
+                                      // Navigator.pushNamed(context, AlbumDetail.path, arguments: item?.productId);
+                                      break;
+                                    case 2:
+                                      Navigator.pushNamed(context, TrainingPage.path, arguments: banner.productId);
+                                      break;
+                                    case 4:
+                                      Navigator.pushNamed(context, TrainingPage.path, arguments: banner.productId);
+                                      break;
+                                    default:
+                                  }
+                                },
+                                child: CachedImage(
+                                  imageUrl: banner.banner.toUrl(),
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            },
+                          ),
+                          Positioned.fill(
+                            bottom: 10,
+                            child: ListenableBuilder(
+                              builder: (context, _) {
+                                return Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: CustomIndicator(
+                                    dotSize: 8,
+                                    current: _selectedbanner.value,
+                                    activeDotSize: 15,
+                                    length: homeProvider.banners.length,
+                                  ),
+                                );
+                              },
+                              listenable: _selectedbanner,
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   const SliverToBoxAdapter(child: VSpacer()),

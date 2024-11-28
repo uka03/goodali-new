@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:goodali/connection/dio_client.dart';
+import 'package:goodali/connection/model/base_response.dart';
 import 'package:goodali/connection/model/podcast_response.dart';
 import 'package:goodali/extensions/string_extensions.dart';
 import 'package:goodali/utils/globals.dart';
@@ -107,6 +108,15 @@ class PlayerProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<BaseResponse> postAlbumFeedback({
+    int? lectureId,
+    int? productId,
+    int? albumId,
+    String? text,
+  }) async {
+    return await _dioClient.postAlbumFeedback(lectureId: lectureId, albumId: albumId, productId: productId, text: text);
   }
 }
 

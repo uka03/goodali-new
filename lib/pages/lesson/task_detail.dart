@@ -28,6 +28,7 @@ class _TaskDetailState extends State<TaskDetail> {
   late final PageController controller;
   ValueNotifier<int> selectedPage = ValueNotifier(0);
   late final TrainingProvider _provider;
+  final _form = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -73,6 +74,9 @@ class _TaskDetailState extends State<TaskDetail> {
                           onPressed: () async {
                             final task = items[selectedPage.value];
                             if (task.isAnswer == 1) {
+                              if (!(_form.currentState?.validate() == true)) {
+                                return;
+                              }
                               if (task.answerData?.isEmpty == true) {
                                 Toast.error(context, description: 'Та хариултаа бичих хэрэгтэй');
                                 return;
@@ -107,33 +111,36 @@ class _TaskDetailState extends State<TaskDetail> {
               ),
             ),
           ),
-          child: PageView.builder(
-            controller: controller,
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) {
-              final item = items[index];
-              YoutubePlayerController? controllerYT;
-              TextEditingController controllerText = TextEditingController(text: item.answerData);
-              if (item.type == 4 && item.videoUrl?.isNotEmpty == true) {
-                controllerYT = YoutubePlayerController(
-                  initialVideoId: item.videoUrl ?? "",
-                  flags: YoutubePlayerFlags(
-                    showLiveFullscreenButton: false,
-                  ),
-                );
-              }
+          child: Form(
+            key: _form,
+            child: PageView.builder(
+              controller: controller,
+              itemCount: items.length,
+              itemBuilder: (BuildContext context, int index) {
+                final item = items[index];
+                YoutubePlayerController? controllerYT;
+                TextEditingController controllerText = TextEditingController(text: item.answerData);
+                if (item.type == 4 && item.videoUrl?.isNotEmpty == true) {
+                  controllerYT = YoutubePlayerController(
+                    initialVideoId: item.videoUrl ?? "",
+                    flags: YoutubePlayerFlags(
+                      showLiveFullscreenButton: false,
+                    ),
+                  );
+                }
 
-              return TextTask(
-                item: item,
-                controllerYT: item.type == 4 ? controllerYT : null,
-                controller: controllerText,
-                onEnd: () {
-                  setState(() {
-                    item.isAnswered = item.isAnswered == 1 ? 0 : 1;
-                  });
-                },
-              );
-            },
+                return TextTask(
+                  item: item,
+                  controllerYT: item.type == 4 ? controllerYT : null,
+                  controller: controllerText,
+                  onEnd: () {
+                    setState(() {
+                      item.isAnswered = item.isAnswered == 1 ? 0 : 1;
+                    });
+                  },
+                );
+              },
+            ),
           ),
         );
       },
@@ -231,6 +238,12 @@ class TextTask extends StatelessWidget {
               extend: true,
               controller: controller,
               hintText: "Хариулт",
+              validator: (value) {
+                if ((value?.length ?? 0) < 5) {
+                  return "Хариулт доод тал нь 5 тэмдэгт байх хэрэгтэй";
+                }
+                return null;
+              },
               onClear: () {
                 item.answerData = "";
               },

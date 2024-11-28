@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodali/pages/album/album_detail.dart';
 import 'package:goodali/pages/album/albums_page.dart';
+import 'package:goodali/pages/album/reply_page.dart';
 import 'package:goodali/pages/article/article_detail.dart';
 import 'package:goodali/pages/article/articles_page.dart';
 import 'package:goodali/pages/auth/change_password.dart';
@@ -67,4 +68,5 @@ final Map<String, WidgetBuilder> routes = {
   ProfileEdit.path: (context) => ProfileEdit(),
   PodcastsPage.path: (context) => PodcastsPage(),
   BookPage.path: (context) => BookPage(),
+  ReplyPage.path: (context) => ReplyPage(),
 };

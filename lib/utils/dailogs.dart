@@ -10,10 +10,11 @@ showAlertDialog(
   required VoidCallback onSuccess,
   required VoidCallback onDismiss,
   List<Widget>? actions,
+  bool dismissible = true,
 }) {
   return showDialog<void>(
     context: context,
-    // barrierDismissible: dismissible,
+    barrierDismissible: dismissible,
     // barrierColor: barrierColor,
     builder: (BuildContext context) {
       return AlertDialog(
@@ -81,8 +82,8 @@ showModalSheet(
       return SafeArea(
         child: Padding(
           padding: EdgeInsets.only(
-              // bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: Container(
             height: height,
             padding: EdgeInsets.only(top: 10, bottom: 10, right: 24, left: 24),

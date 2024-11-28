@@ -73,6 +73,7 @@ PurchasePackageData _$PurchasePackageDataFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       opennedDate: json['openned_date'] as String?,
       expiredDate: json['expired_date'] as String?,
+      productId: (json['productId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$PurchasePackageDataToJson(
@@ -82,6 +83,7 @@ Map<String, dynamic> _$PurchasePackageDataToJson(
       'name': instance.name,
       'openned_date': instance.opennedDate,
       'expired_date': instance.expiredDate,
+      'productId': instance.productId,
     };
 
 PurchaseAlbumData _$PurchaseAlbumDataFromJson(Map<String, dynamic> json) =>

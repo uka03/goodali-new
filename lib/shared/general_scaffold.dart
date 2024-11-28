@@ -174,9 +174,12 @@ class GeneralScaffold extends StatelessWidget {
                   horizontal: horizontalPadding ?? 20.0,
                   vertical: verticalPadding ?? 20.0,
                 ),
-            child: SafeArea(
-              bottom: bottom,
-              child: child,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: data != null ? 70.0 : 0),
+              child: SafeArea(
+                bottom: bottom,
+                child: child,
+              ),
             ),
           ),
         );

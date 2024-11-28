@@ -6,6 +6,8 @@ import 'package:goodali/shared/components/cached_image.dart';
 import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
+import 'package:goodali/utils/text_styles.dart';
+import 'package:goodali/utils/utils.dart';
 
 class HomeTraining extends StatelessWidget {
   const HomeTraining({super.key, required this.homeData, this.onPressed});
@@ -38,7 +40,97 @@ class HomeTraining extends StatelessWidget {
                       aspectRatio: 16 / 9,
                       child: CachedImage(
                         imageUrl: item.item.training?.banner.toUrl() ?? placeholder,
-                        borderRadius: 20,
+                        borderRadius: 8,
+                      ),
+                    ),
+                    Container(
+                      height: 180,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                        ),
+                        gradient: LinearGradient(
+                          stops: const [
+                            0.6,
+                            1
+                          ],
+                          colors: [
+                            Colors.black.withOpacity(0.3),
+                            Colors.transparent,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      top: 20,
+                      bottom: 20,
+                      left: 16,
+                      right: 16,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  item.item.training?.name ?? "",
+                                  style: GeneralTextStyle.titleText(
+                                    fontSize: 34,
+                                    textColor: Colors.white,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  removeHtmlTags(item.item.training?.body ?? ""),
+                                  style: GeneralTextStyle.titleText(
+                                    textColor: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                  maxLines: 2,
+                                  // overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          HSpacer(),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(60),
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "Дэлгэрэнгүй",
+                                        style: GeneralTextStyle.titleText(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      HSpacer.sm(),
+                                      Icon(
+                                        Icons.arrow_forward,
+                                        size: 20,
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   ],

@@ -42,3 +42,33 @@ Map<String, dynamic> _$UserResponseDataToJson(UserResponseData instance) =>
       'created_at': instance.createdAt,
       'hasTraining': instance.hasTraining,
     };
+
+SettingsResponse _$SettingsResponseFromJson(Map<String, dynamic> json) =>
+    SettingsResponse(
+      data: json['data'] == null
+          ? null
+          : SettingsResponseData.fromJson(json['data'] as Map<String, dynamic>),
+      error: json['error'] as String?,
+      message: json['message'] as String?,
+      success: json['success'] as bool?,
+    );
+
+Map<String, dynamic> _$SettingsResponseToJson(SettingsResponse instance) =>
+    <String, dynamic>{
+      'success': instance.success,
+      'error': instance.error,
+      'message': instance.message,
+      'data': instance.data,
+    };
+
+SettingsResponseData _$SettingsResponseDataFromJson(
+        Map<String, dynamic> json) =>
+    SettingsResponseData(
+      appVersion: json['app_version'] as String?,
+    );
+
+Map<String, dynamic> _$SettingsResponseDataToJson(
+        SettingsResponseData instance) =>
+    <String, dynamic>{
+      'app_version': instance.appVersion,
+    };

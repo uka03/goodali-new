@@ -6,6 +6,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     this.hasPresident = false,
+    this.titleCenter = false,
     this.title,
     this.action,
     this.leading,
@@ -13,7 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottom,
   });
 
-  final bool hasPresident;
+  final bool hasPresident, titleCenter;
   final Widget? title, leading;
   final List<Widget>? action;
   final Color? bgColor;
@@ -28,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leading,
       scrolledUnderElevation: 0,
       backgroundColor: bgColor ?? GeneralColors.primaryBGColor,
-      centerTitle: false,
+      centerTitle: titleCenter,
       title: title,
       bottom: bottom,
       actions: [
