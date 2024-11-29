@@ -21,9 +21,11 @@ class PodcastItem extends StatelessWidget {
     super.key,
     required this.podcast,
     this.onclickAfter,
+    required this.type,
   });
 
   final PodcastResponseData? podcast;
+  final String? type;
   final Function()? onclickAfter;
 
   @override
@@ -37,7 +39,7 @@ class PodcastItem extends StatelessWidget {
               final cart = context.read<CartProvider>();
               if (isCarted) {
                 cart.removeCart(podcast?.productId);
-                Toast.success(context, description: "Сагсанаас хасалаа.");
+                Toast.success(context, description: "Сагснаас хасагдлаа");
               } else {
                 cart.addCart(podcast?.productId);
                 Toast.success(context, description: "Сагсанд нэмэгдлээ.");
@@ -83,6 +85,7 @@ class PodcastItem extends StatelessWidget {
             await Navigator.pushNamed(context, PodcastPlayer.path, arguments: {
               "id": podcast?.id,
               "data": podcast,
+              "type": type,
             });
             if (onclickAfter != null) {
               onclickAfter!();
@@ -193,7 +196,7 @@ class PodcastItem extends StatelessWidget {
                       icon: Icons.play_arrow_rounded,
                       color: hasPausedTime ? GeneralColors.primaryColor : Colors.black,
                       onPressed: () async {
-                        await provider.init(podcast);
+                        await provider.init(podcast, type);
                         provider.setPlayerState(CustomState.playing);
                       },
                     ),

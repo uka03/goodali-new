@@ -92,7 +92,7 @@ class _AlbumDetailState extends State<AlbumDetail> {
                           Toast.error(context, description: "Та нэвтрэх хэрэгтэй.");
                         }
                       },
-                      title: isCarted?.isEmpty == true ? "Цомог саглах" : "Цомог саглалсан",
+                      title: isCarted?.isEmpty == true ? "Цомог сагслах" : " Цомог сагсалсан",
                     ),
                   ),
                 )
@@ -160,6 +160,7 @@ class _AlbumDetailState extends State<AlbumDetail> {
                               albumProvider.getReplies(album?.id, "lecture");
                             }
                           },
+                          type: 'lecture',
                         );
                       },
                     ),

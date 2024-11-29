@@ -65,12 +65,14 @@ class ProfileProvider extends ChangeNotifier {
     }
     for (int i = 0; i < (response.data?.albums?.length ?? 0); i++) {
       for (var l = 0; l < (response.data?.albums?[i].lectures?.length ?? 0); l++) {
+        final podcast = response.data?.albums?[i].lectures?[l];
+        podcast?.isPaid = true;
         if (l == 0) {
           dataList.add(
             BoughtData(
               items: BoughtItems(
                 training: null,
-                podcast: response.data?.albums?[i].lectures?[l],
+                podcast: podcast,
               ),
               title: response.data?.albums?[i].albumTitle,
               withTitle: true,
@@ -81,7 +83,7 @@ class ProfileProvider extends ChangeNotifier {
             BoughtData(
               items: BoughtItems(
                 training: null,
-                podcast: response.data?.albums?[i].lectures?[l],
+                podcast: podcast,
               ),
               title: response.data?.albums?[i].albumTitle,
               withTitle: false,

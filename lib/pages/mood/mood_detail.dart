@@ -118,7 +118,7 @@ class _MoodDetailState extends State<MoodDetail> {
 
                         if (moodDetail.audio?.isNotEmpty == true && moodDetail.id != audioProvider.data?.id) {
                           final data = PodcastResponseData.fromJson(moodDetail.toJson());
-                          audioProvider.init(data);
+                          audioProvider.init(data, "mood");
                         }
 
                         return Padding(

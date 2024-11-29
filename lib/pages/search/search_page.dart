@@ -230,7 +230,10 @@ class _SearchPageState extends State<SearchPage> {
                                       Navigator.pushNamed(
                                         context,
                                         PodcastPlayer.path,
-                                        arguments: item.id,
+                                        arguments: {
+                                          "id": item.id,
+                                          "type": "podcast",
+                                        },
                                       );
                                       break;
                                   }

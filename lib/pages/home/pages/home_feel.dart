@@ -25,6 +25,7 @@ class HomeFeel extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: PodcastItem(
                 podcast: homeData.moodMain[0],
+                type: 'mood',
               ),
             ),
           VSpacer(),

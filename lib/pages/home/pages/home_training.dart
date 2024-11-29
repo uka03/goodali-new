@@ -7,7 +7,6 @@ import 'package:goodali/shared/components/custom_button.dart';
 import 'package:goodali/utils/globals.dart';
 import 'package:goodali/utils/spacer.dart';
 import 'package:goodali/utils/text_styles.dart';
-import 'package:goodali/utils/utils.dart';
 
 class HomeTraining extends StatelessWidget {
   const HomeTraining({super.key, required this.homeData, this.onPressed});
@@ -72,32 +71,7 @@ class HomeTraining extends StatelessWidget {
                       right: 16,
                       child: Row(
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  item.item.training?.name ?? "",
-                                  style: GeneralTextStyle.titleText(
-                                    fontSize: 34,
-                                    textColor: Colors.white,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  removeHtmlTags(item.item.training?.body ?? ""),
-                                  style: GeneralTextStyle.titleText(
-                                    textColor: Colors.white,
-                                    fontSize: 14,
-                                  ),
-                                  maxLines: 2,
-                                  // overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
+                          Expanded(child: SizedBox()),
                           HSpacer(),
                           Expanded(
                             child: Column(

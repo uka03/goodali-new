@@ -148,7 +148,10 @@ class _PodcastsPageState extends State<PodcastsPage> {
             );
           },
           itemBuilder: (BuildContext context, item, int index) {
-            return PodcastItem(podcast: item);
+            return PodcastItem(
+              podcast: item,
+              type: 'podcast',
+            );
           },
         ),
       ),

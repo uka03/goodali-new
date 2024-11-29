@@ -42,7 +42,7 @@ class _PodcastPlayerState extends State<PodcastPlayer> {
         data = await _playerProvider.getPodcastById(arg["id"]);
       }
       dismissLoader();
-      await _playerProvider.init(data);
+      await _playerProvider.init(data, arg["type"]);
     });
   }
 

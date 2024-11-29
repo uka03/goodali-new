@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -463,12 +462,12 @@ class DioClient {
     }
   }
 
-  Future<BaseResponse> podcastPausedTime(int? id, int pausedTime) async {
+  Future<BaseResponse> podcastPausedTime(int? id, int pausedTime, String type) async {
     try {
       final response = await _dioClient.post(
-        "$baseUrl$podcastUrl/$id/pause",
+        "$baseUrl/$type/$id/pause",
         data: {
-          "audioType": "podcast",
+          "audioType": type,
           "pausedTime": pausedTime
         },
       );
@@ -601,7 +600,6 @@ class DioClient {
     try {
       final response = await _dioClient.get("$baseUrl$trainingUrl/$id");
       final model = TrainingDetailResponse.fromJson(response.data);
-      log(model.data.toJson().toString());
       return model;
     } catch (e) {
       final dioFailure = e as DioException?;

@@ -13,6 +13,7 @@ import 'package:rxdart/rxdart.dart';
 class PlayerProvider extends ChangeNotifier {
   final _dioClient = DioClient();
   PodcastResponseData? data;
+  String? type;
   AudioPlayer? audioPlayer;
   StreamSubscription? sub;
   CustomState? customState;
@@ -32,14 +33,15 @@ class PlayerProvider extends ChangeNotifier {
     return await _dioClient.getPodcast(id);
   }
 
-  init(PodcastResponseData? item) async {
-    if (item?.id == data?.id) {
+  init(PodcastResponseData? item, String? valtype) async {
+    if (item?.id == data?.id && type == valtype) {
       return;
     }
     if (item != null) {
       try {
         await setPlayerState(CustomState.disposed);
         data = item;
+        type = valtype;
         audioPlayer ??= AudioPlayer();
 
         streamController = BehaviorSubject<SeekBarData>();
@@ -86,7 +88,17 @@ class PlayerProvider extends ChangeNotifier {
           break;
         case CustomState.disposed:
           if (data != null) {
-            await _dioClient.podcastPausedTime(data?.id, audioPlayer?.position.inSeconds ?? 0);
+            if ([
+              "lecture",
+              "book",
+              "podcast"
+            ].contains(type)) {
+              await _dioClient.podcastPausedTime(
+                data?.id,
+                audioPlayer?.position.inSeconds ?? 0,
+                type ?? "",
+              );
+            }
           }
           data?.pausedTime.value = audioPlayer?.position.inSeconds;
 
@@ -97,6 +109,7 @@ class PlayerProvider extends ChangeNotifier {
           await streamController?.close();
           streamController = null;
           data = null;
+          type = null;
           customState = null;
           // _initiated = false;
           break;

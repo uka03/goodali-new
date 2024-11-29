@@ -60,6 +60,7 @@ class HomeListen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: PodcastItem(
                   podcast: data.item.podcast,
+                  type: 'podcast',
                 ),
               ),
             if (data.item.video != null)

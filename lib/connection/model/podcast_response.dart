@@ -41,7 +41,7 @@ class PodcastResponseData {
   final int? productId;
   @JsonKey(name: "is_special")
   final bool? isSpecial;
-  final bool? isPaid;
+  bool? isPaid;
   @JsonKey(fromJson: _valueNotifierNullableFromJson, toJson: _valueNotifierNullableToJson, name: "paused_time")
   late ValueNotifier<int?> pausedTime;
 

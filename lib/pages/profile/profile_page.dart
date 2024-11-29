@@ -112,6 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           if (data.items.podcast != null)
                                             PodcastItem(
                                               podcast: data.items.podcast,
+                                              type: 'lecture',
                                             ),
                                           if (data.items.book != null)
                                             CustomButton(
@@ -122,6 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   arguments: {
                                                     "id": data.items.book?.id,
                                                     "data": data.items.book,
+                                                    "type": "book",
                                                   },
                                                 );
                                               },

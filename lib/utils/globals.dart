@@ -3,7 +3,7 @@ import 'package:goodali/utils/types.dart';
 
 final bottomItems = [
   BottomItemData(iconPath: "assets/icons/ic_heart.png", index: 0, title: "Сэтгэл"),
-  BottomItemData(iconPath: "assets/icons/ic_chat.png", index: 1, title: "Гал"),
+  BottomItemData(iconPath: "assets/icons/ic_chat.png", index: 1, title: "Түүдэг гал"),
   BottomItemData(iconPath: "assets/icons/ic_profile.png", index: 2, title: "Би")
 ];
 const String placeholder = "https://online-accounting.net/wp-content/uploads/2021/07/placeholder-image.jpg";
